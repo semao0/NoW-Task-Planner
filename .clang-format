@@ -1,0 +1,41 @@
+# Основные настройки
+BasedOnStyle: LLVM       # Базовый стиль (можно заменить на Google, Chromium и т.д.)
+IndentWidth: 4           # Ширина отступа
+TabWidth: 4              # Ширина табуляции
+UseTab: Never            # Использовать пробелы вместо табуляций (можно Always или ForIndentation)
+AccessModifierOffset: -4
+
+#Выравнивания
+AlignAfterOpenBracket: Align   # Выравнивать аргументы после открывающей скобки
+AlignConsecutiveAssignments: false  # Выравнивать подряд идущие присваивания
+AlignConsecutiveDeclarations: false # Выравнивать подряд идущие объявления
+AlignTrailingComments: true       # Выравнивать комментарии после кода
+
+
+# Скобки и пробелы
+BreakBeforeBraces: Allman            # Расположение фигурных скобок (Allman, GNU, Linux, Stroustrup, WebKit)
+SpaceBeforeParens: ControlStatements  # Пробел перед скобками в управляющих конструкциях
+AlwaysBreakTemplateDeclarations: true # Переносить шаблоны на новую строку
+
+
+
+
+# Форматирование функций
+AllowShortFunctionsOnASingleLine: Empty  # Короткие функции в одну строку (Empty, InlineOnly, None)
+ConstructorInitializerIndentWidth: 4     # Отступ для инициализации конструктора
+
+# Форматирование массивов
+BinPackArguments: false  # Не упаковывать аргументы функций в одну строку
+BinPackParameters: false # Не упаковывать параметры функций в одну строку
+
+# Указатели и ссылки
+PointerAlignment: Left    # Выравнивание указателей (*var или var*)
+ReferenceAlignment: Left  # Выравнивание ссылок (&var или var&)
+SpaceAfterCStyleCast: true  # Пробел после приведения типа (int)x -> (int) x
+
+# Прочее
+IncludeBlocks: Preserve   # Оставлять порядок include без изменений
+SortIncludes: false       # Не сортировать include
+IndentCaseLabels: true    # Отступ для case
+ColumnLimit: 80           # Лимит символов в строке
+MaxEmptyLinesToKeep: 1    # Максимум пустых строк подряд
