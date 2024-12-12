@@ -11,14 +11,19 @@ void TaskManager::removeTask(Task* task)
 }
 void TaskManager::checkDeadlines()
 {
-    for(auto* task : tasks)
+    for (auto* task : tasks)
     {
-        if(task->isDeadLineMissed())
+        if (task->isDeadLineMissed())
         {
             std::cout << "Дедлайн задачи \"" << task->getName() << "\" истек!" << std::endl;
         }
+        else
+        {
+            std::cout << "Дедлайн задачи \"" << task->getName() << "\" еще не истек!" << std::endl;
+        }
     }
 }
-const std::vector<Task*>& TaskManager::getTasks() const{
+const std::vector<Task*>& TaskManager::getTasks() const
+{
     return tasks;
 }

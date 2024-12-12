@@ -10,9 +10,9 @@ private:
     std::vector<Task*> tasks;
 
 public:
-void addTask(Task* task);
-void removeTask(Task* task);
-void checkDeadlines();
-const std::vector<Task*>& getTasks() const;
+    void addTask(Task* task);
+    void removeTask(Task* task);
+    void checkDeadlines();
+    const std::vector<Task*>& getTasks() const;
 };
 #endif
