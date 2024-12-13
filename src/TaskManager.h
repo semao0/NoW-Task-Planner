@@ -14,5 +14,8 @@ public:
     void removeTask(Task* task);
     void checkDeadlines();
     const std::vector<Task*>& getTasks() const;
+
+    void loadTasks();
+    void saveTasks() const;
 };
 #endif

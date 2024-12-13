@@ -34,3 +34,18 @@ std::string Task::getName() const
 {
     return name;
 }
+
+std::string Task::getDescription() const
+{
+    return description;
+}
+
+std::chrono::system_clock::time_point Task::getDeadline() const
+{
+    return deadline;
+}
+
+std::vector<Task*> Task::getSubtasks() const
+{
+    return subtasks;
+}

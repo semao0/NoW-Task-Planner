@@ -1,6 +1,10 @@
 #include "TaskManager.h"
 #include <algorithm>
 #include <iostream>
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
+
 void TaskManager::addTask(Task* task)
 {
     tasks.push_back(task);
@@ -26,4 +30,14 @@ void TaskManager::checkDeadlines()
 const std::vector<Task*>& TaskManager::getTasks() const
 {
     return tasks;
+}
+
+void TaskManager::loadTasks() 
+{
+
+}
+
+void TaskManager::saveTasks() const
+{
+
 }

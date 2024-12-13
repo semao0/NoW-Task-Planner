@@ -24,5 +24,8 @@ public:
     void addSubtasks(Task* subtask);
     void markCompleted();
     std::string getName() const;
+    std::string getDescription() const;
+    std::chrono::system_clock::time_point getDeadline() const;
+    std::vector<Task*> getSubtasks() const;
 };
 #endif
