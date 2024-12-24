@@ -1,16 +1,13 @@
 #include "TaskManager.h"
+#include "MainWindow.h"
 #include <chrono>
+#include <iostream>
 
 int main()
 {
-    TaskManager manager;
+    std::cout << "Рабочая директория: " << std::filesystem::current_path() << std::endl;
+    MainWindow window;
+    window.run();
 
-    auto task1 = new Task("Finish Project", "Complete the task planner project");
-    auto now = std::chrono::system_clock::now();
-    task1->setDeadLine(now + std::chrono::hours(2));
-
-    manager.addTask(task1);
-
-    manager.checkDeadlines();
     return 0;
 }

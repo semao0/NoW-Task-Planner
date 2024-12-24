@@ -3,6 +3,7 @@
 
 #include "Task.h"
 #include <vector>
+#include <nlohmann/json.hpp>
 
 class TaskManager
 {
@@ -17,5 +18,9 @@ public:
 
     void loadTasks();
     void saveTasks() const;
+    void clearTasks();
+
+    nlohmann::json serializeTask(const Task* task) const;
+    Task* deserializeTask(const nlohmann::json& taskJson);
 };
 #endif
