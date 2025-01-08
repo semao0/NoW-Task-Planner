@@ -34,6 +34,11 @@ const std::vector<Task*>& TaskManager::getTasks() const
     return tasks;
 }
 
+const int TaskManager::getCountTasks() const
+{
+    return tasks.size();
+}
+
 void TaskManager::saveTasks() const
 {
     json j = json::array();

@@ -1,13 +1,13 @@
 #include "TaskManager.h"
 #include "MainWindow.h"
 #include <chrono>
+#include <ctime>
 #include <iostream>
+#include <sched.h>
 
 int main()
 {
-    std::cout << "Рабочая директория: " << std::filesystem::current_path() << std::endl;
     MainWindow window;
     window.run();
-
     return 0;
 }
