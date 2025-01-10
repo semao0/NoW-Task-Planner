@@ -1,4 +1,5 @@
 #include "CreateWindow.h"
+#include "CalendareWidget.h"
 #include "ScrollableList.h"
 #include "TaskManager.h"
 #include "Label.h"
@@ -12,10 +13,10 @@
 #include <iostream>
 #include <memory>
 
-CreateWindow::CreateWindow() : window(sf::VideoMode(1000, 700), "NoW")
+CreateWindow::CreateWindow() : window(sf::VideoMode(1000, 700), "NoW - Create task")
 {
     auto button =
-        std::make_shared<Button>(810, 630, 170, 40, "        Create", []() { std::cout << "Ddddd" << std::endl; });
+        std::make_shared<Button>(810, 630, 170, 40, "        Create", []() { std::cout << "Ddddd" << std::endl; }, 20);
     CreateElemets.addElement(button);
 
     auto nameinput = std::make_shared<TextInput>(400, 100, 450, 40);
@@ -28,8 +29,8 @@ CreateWindow::CreateWindow() : window(sf::VideoMode(1000, 700), "NoW")
     auto desclabel = std::make_shared<Label>(100, 200, 100, 40, "Description:");
     CreateElemets.addElement(desclabel);
 
-    auto deadlineinput = std::make_shared<TextInput>(400, 300, 450, 40);
-    CreateElemets.addElement(deadlineinput);
+    auto calendarewidget = std::make_shared<CalendareWidget>(400, 300, 300, 100);
+    CreateElemets.addElement(calendarewidget);
     auto deadlinelabel = std::make_shared<Label>(100, 300, 100, 40, "Deadline:");
     CreateElemets.addElement(deadlinelabel);
 }

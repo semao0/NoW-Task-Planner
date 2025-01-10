@@ -14,7 +14,7 @@ private:
     std::function<void()> onClick;
 
 public:
-    Button(float x, float y, float width, float height, const std::string& text, const std::function<void()> callback)
+    Button(float x, float y, float width, float height, const std::string& text, const std::function<void()> callback, int charsize)
         : onClick(callback)
     {
         box.setPosition(x, y);
@@ -28,7 +28,7 @@ public:
         }
         label.setFont(font);
         label.setString(text);
-        label.setCharacterSize(20);
+        label.setCharacterSize(charsize);
         label.setFillColor(sf::Color::Black);
         label.setPosition(x + 10, y + 5);
     }
