@@ -2,6 +2,8 @@
 #define TASKMANAGER_H
 
 #include "Task.h"
+#include <chrono>
+#include <nlohmann/json_fwd.hpp>
 #include <vector>
 #include <nlohmann/json.hpp>
 
@@ -23,5 +25,7 @@ public:
 
     nlohmann::json serializeTask(const Task* task) const;
     Task* deserializeTask(const nlohmann::json& taskJson);
+    void SaveYearMonthDayJson(const std::chrono::year_month_day& deadline, nlohmann::json& taskJson) const;
+    std::chrono::year_month_day LoadYearMonthDayJson(const nlohmann::json& taskJson) const;
 };
 #endif

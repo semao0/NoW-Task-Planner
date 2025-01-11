@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 #include <chrono>
-
 class Task
 {
 private:
@@ -12,20 +11,20 @@ private:
     std::string description;
     std::vector<Task*> subtasks;
     bool isCompleted;
-    std::chrono::system_clock::time_point deadline;
+    std::chrono::year_month_day deadline;
 
 public:
-    Task(const std::string& name, const std::string& description);
+    Task(const std::string& name, const std::string& description, std::chrono::year_month_day a);
 
-    void setDeadLine(const std::chrono::system_clock::time_point& newDeadLine);
-    std::chrono::duration<double> getTimeLeft() const;
-    bool isDeadLineMissed() const;
+    void setDeadLine(const std::chrono::year_month_day);
+    std::chrono::days getTimeLeft() const;
+    bool isDeadLineActive() const;
 
     void addSubtasks(Task* subtask);
     void markCompleted();
     std::string getName() const;
     std::string getDescription() const;
-    std::chrono::system_clock::time_point getDeadline() const;
+    std::chrono::year_month_day getDeadline() const;
     std::vector<Task*> getSubtasks() const;
 };
 #endif

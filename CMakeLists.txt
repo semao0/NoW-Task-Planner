@@ -4,7 +4,7 @@ project(TaskPlanner)
 # Указываем стандарт C++
 set(CMAKE_C_COMPILER "/usr/bin/clang")
 set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 # CMakeLists.txt
 add_executable(TaskPlanner src/main.cpp src/Windows/MainWindow.cpp src/Windows/CreateWindow.cpp src/Task.cpp src/TaskManager.cpp src/Elements/ScrollableList.cpp src/Elements/CalendareWidget.cpp)

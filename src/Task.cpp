@@ -1,23 +1,31 @@
 #include "Task.h"
+#include <bits/chrono.h>
+#include <chrono>
+#include <iterator>
 
-Task::Task(const std::string& name, const std::string& description)
-    : name(name), description(description), isCompleted(false)
+Task::Task(const std::string& name, const std::string& description, std::chrono::year_month_day deadline)
+    : name(name), description(description), isCompleted(false),
+      deadline(deadline.year(), deadline.month(), deadline.day())
 {
 }
 
-void Task::setDeadLine(const std::chrono::system_clock::time_point& newDeadLine)
+void Task::setDeadLine(const std::chrono::year_month_day newDeadLine)
 {
     deadline = newDeadLine;
 }
 
-std::chrono::duration<double> Task::getTimeLeft() const
+std::chrono::days Task::getTimeLeft() const
 {
-    return deadline - std::chrono::system_clock::now();
+    auto timenow = floor<std::chrono::days>(std::chrono::system_clock::now());
+    std::chrono::sys_days deadline_days = std::chrono::sys_days(deadline);
+    return deadline_days - timenow;
 }
 
-bool Task::isDeadLineMissed() const
+bool Task::isDeadLineActive() const
 {
-    return deadline < std::chrono::system_clock::now();
+    auto daysnow = floor<std::chrono::days>(std::chrono::system_clock::now());
+    std::chrono::year_month_day now{daysnow};
+    return deadline >= now;
 }
 
 void Task::addSubtasks(Task* subtask)
@@ -40,7 +48,7 @@ std::string Task::getDescription() const
     return description;
 }
 
-std::chrono::system_clock::time_point Task::getDeadline() const
+std::chrono::year_month_day Task::getDeadline() const
 {
     return deadline;
 }

@@ -1,4 +1,5 @@
 #include "TaskManager.h"
+#include "Task.h"
 #include <algorithm>
 #include <chrono>
 #include <fstream>
@@ -19,7 +20,7 @@ void TaskManager::checkDeadlines()
 {
     for (auto* task : tasks)
     {
-        if (task->isDeadLineMissed())
+        if (!task->isDeadLineActive())
         {
             std::cout << "Дедлайн задачи \"" << task->getName() << "\" истек!" << std::endl;
         }
@@ -74,8 +75,7 @@ json TaskManager::serializeTask(const Task* task) const
     json taskJson;
     taskJson["name"] = task->getName();
     taskJson["description"] = task->getDescription();
-    taskJson["deadline"] =
-        std::chrono::duration_cast<std::chrono::seconds>(task->getDeadline().time_since_epoch()).count();
+    SaveYearMonthDayJson(task->getDeadline(), taskJson);
     taskJson["subtasks"] = json::array();
 
     for (const auto* subtask : task->getSubtasks())
@@ -88,15 +88,26 @@ json TaskManager::serializeTask(const Task* task) const
 
 Task* TaskManager::deserializeTask(const json& taskJson)
 {
-    Task* task = new Task(taskJson["name"], taskJson["description"]);
-
-    std::chrono::seconds deadline_seconds(taskJson["deadline"]);
-    task->setDeadLine(std::chrono::system_clock::time_point(deadline_seconds));
+    Task* task = new Task(taskJson["name"], taskJson["description"], LoadYearMonthDayJson(taskJson));
 
     for (const auto& subtasksJson : taskJson["subtasks"])
         task->addSubtasks(deserializeTask(subtasksJson));
 
     return task;
+}
+
+void TaskManager::SaveYearMonthDayJson(const std::chrono::year_month_day& deadline, nlohmann::json& taskJson) const
+{
+    taskJson["year"] = int(deadline.year());
+    taskJson["month"] = unsigned(deadline.month());
+    taskJson["day"] = unsigned(deadline.day());
+}
+std::chrono::year_month_day TaskManager::LoadYearMonthDayJson(const nlohmann::json& taskJson) const
+{
+    int year = taskJson["year"];
+    unsigned month = taskJson["month"];
+    unsigned day = taskJson["day"];
+    return std::chrono::year_month_day{std::chrono::year{year}, std::chrono::month{month}, std::chrono::day{day}};
 }
 
 void TaskManager::clearTasks()
