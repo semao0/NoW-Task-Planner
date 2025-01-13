@@ -104,6 +104,7 @@ void CalendareWidget::handleEvent(const sf::Event& event)
             if (MousePos.x > x && MousePos.x < x + 30 && MousePos.y > y && MousePos.y < y + 30 && days[i] != 0)
             {
                 selectedDay = days[i];
+                currentDate.day = days[i];
                 std::cout << days[i] << "-" << currentDate.month << "-" << currentDate.year << std::endl;
             }
         }
@@ -168,4 +169,9 @@ void CalendareWidget::changeDate(const int count)
     }
 
     updateCalendare();
+}
+
+std::chrono::year_month_day CalendareWidget::getSelectedDate() const
+{
+    return std::chrono::year_month_day{std::chrono::year(currentDate.year), std::chrono::month(currentDate.month), std::chrono::day(currentDate.day)};
 }

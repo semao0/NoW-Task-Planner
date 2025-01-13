@@ -14,17 +14,23 @@
 
 MainWindow::MainWindow() : window(sf::VideoMode(1000, 700), "NoW")
 {
+    Scroll = std::make_shared<ScrollableList>(20, 20, 600, 600, 100);
     auto button = std::make_shared<Button>(
-        810, 15, 170, 40, "Create new task", []() {auto window = std::make_shared<CreateWindow>(); 
-        window->run();
-        }, 20);
+        810,
+        15,
+        170,
+        40,
+        "Create new task",
+        [this, &Scroll = Scroll]()
+        {
+            auto window = std::make_shared<CreateWindow>(tasks, *Scroll);
+            window->run();
+        },
+        20);
     MainElemets.addElement(button);
-    auto Scroll = std::make_shared<ScrollableList>(20, 20, 600, 600, 100);
-    TaskManager tasks;
     MainElemets.addElement(Scroll);
     tasks.loadTasks();
     Scroll->setTasks(tasks);
-    tasks.clearTasks();
     tasks.saveTasks();
 }
 

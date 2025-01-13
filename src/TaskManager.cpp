@@ -8,11 +8,11 @@
 
 using json = nlohmann::json;
 
-void TaskManager::addTask(Task* task)
+void TaskManager::addTask(const Task& task)
 {
     tasks.push_back(task);
 }
-void TaskManager::removeTask(Task* task)
+void TaskManager::removeTask(const Task& task)
 {
     tasks.erase(std::remove(tasks.begin(), tasks.end(), task), tasks.end());
 }

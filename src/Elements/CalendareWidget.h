@@ -3,6 +3,7 @@
 
 #include "guiElement.h"
 #include "guiManager.h"
+#include <chrono>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -47,5 +48,6 @@ public:
     CalendareWidget(float x, float y, float width, float height);
     void draw(sf::RenderWindow& window) override;
     void handleEvent(const sf::Event& event) override;
+    std::chrono::year_month_day getSelectedDate() const;
 };
 #endif

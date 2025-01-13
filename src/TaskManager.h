@@ -10,11 +10,11 @@
 class TaskManager
 {
 private:
-    std::vector<Task*> tasks;
+    std::vector<Task> tasks;
 
 public:
-    void addTask(Task* task);
-    void removeTask(Task* task);
+    void addTask(const Task& task);
+    void removeTask(const Task& task);
     void checkDeadlines();
     const std::vector<Task*>& getTasks() const;
     const int getCountTasks() const;
