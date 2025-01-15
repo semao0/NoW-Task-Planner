@@ -15,6 +15,11 @@
 MainWindow::MainWindow() : window(sf::VideoMode(1000, 700), "NoW")
 {
     Scroll = std::make_shared<ScrollableList>(20, 20, 600, 600, 100);
+    Scroll->onClickCallback = [this](int index)
+    {
+        auto selectedTask = tasks.getTasks()[index];
+        
+    };
     auto button = std::make_shared<Button>(
         810,
         15,

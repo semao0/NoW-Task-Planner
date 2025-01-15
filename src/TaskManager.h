@@ -16,15 +16,15 @@ public:
     void addTask(const Task& task);
     void removeTask(const Task& task);
     void checkDeadlines();
-    const std::vector<Task*>& getTasks() const;
+    const std::vector<Task>& getTasks() const;
     const int getCountTasks() const;
 
     void loadTasks();
     void saveTasks() const;
     void clearTasks();
 
-    nlohmann::json serializeTask(const Task* task) const;
-    Task* deserializeTask(const nlohmann::json& taskJson);
+    nlohmann::json serializeTask(const Task task) const;
+    Task deserializeTask(const nlohmann::json& taskJson);
     void SaveYearMonthDayJson(const std::chrono::year_month_day& deadline, nlohmann::json& taskJson) const;
     std::chrono::year_month_day LoadYearMonthDayJson(const nlohmann::json& taskJson) const;
 };

@@ -1,4 +1,4 @@
-#include "CreateWindow.h"
+#include "EditWindow.h"
 #include "CalendareWidget.h"
 #include "ScrollableList.h"
 #include "TaskManager.h"
@@ -12,44 +12,36 @@
 #include <SFML/Window/VideoMode.hpp>
 #include <iostream>
 #include <memory>
-
-CreateWindow::CreateWindow(TaskManager& tasks, ScrollableList& Scroll)
-    : window(sf::VideoMode(1000, 700), "NoW - Create task")
+EditWindow::EditWindow() : window(sf::VideoMode(1000, 700), "NoW -  task")
 {
-    auto nameinput = std::make_shared<TextInput>(400, 100, 450, 35);
-    CreateElemets.addElement(nameinput);
+    auto nameinput = std::make_shared<TextInput>(400, 100, 450, 40);
+    nameinput.setString()
+    EditElemets.addElement(nameinput);
     auto namelabel = std::make_shared<Label>(100, 100, 100, 40, "Name:");
-    CreateElemets.addElement(namelabel);
+    EditElemets.addElement(namelabel);
 
-    auto descinput = std::make_shared<TextInput>(400, 200, 450, 35);
-    CreateElemets.addElement(descinput);
+    auto descinput = std::make_shared<TextInput>(400, 200, 450, 40);
+    EditElemets.addElement(descinput);
     auto desclabel = std::make_shared<Label>(100, 200, 100, 40, "Description:");
-    CreateElemets.addElement(desclabel);
+    EditElemets.addElement(desclabel);
 
     auto calendarewidget = std::make_shared<CalendareWidget>(395, 300, 280, 100);
-    CreateElemets.addElement(calendarewidget);
+    EditElemets.addElement(calendarewidget);
     auto deadlinelabel = std::make_shared<Label>(100, 300, 100, 40, "Deadline:");
-    CreateElemets.addElement(deadlinelabel);
+    EditElemets.addElement(deadlinelabel);
 
     auto button = std::make_shared<Button>(
         810,
         630,
         170,
         40,
-        "        Create",
-        [nameinput, descinput, calendarewidget, &tasks = tasks, &window = window, &Scroll = Scroll]()
-        {
-            Task newtask{nameinput->getText(), descinput->getText(), calendarewidget->getSelectedDate()};
-            tasks.addTask(newtask);
-            tasks.saveTasks();
-            window.close();
-            Scroll.setTasks(tasks);
-        },
+        "           Save",
+        [nameinput, descinput, calendarewidget, &tasks = tasks, &window = window, &Scroll = Scroll]() {},
         20);
-    CreateElemets.addElement(button);
+    EditElemets.addElement(button);
 }
 
-void CreateWindow::run()
+void EditWindow::run()
 {
     while (window.isOpen())
     {
@@ -57,7 +49,7 @@ void CreateWindow::run()
         render();
     }
 }
-void CreateWindow::handleEvents()
+void EditWindow::handleEvents()
 {
     sf::Event event;
     while (window.pollEvent(event))
@@ -66,7 +58,7 @@ void CreateWindow::handleEvents()
         {
             window.close();
         }
-        CreateElemets.handleEvent(event);
+        CrhandleEvent(event);
     }
 }
 void CreateWindow::render()

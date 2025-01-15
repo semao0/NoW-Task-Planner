@@ -29,7 +29,7 @@ public:
         }
         text.setFont(font);
         text.setFillColor(sf::Color::Black);
-        text.setCharacterSize(24);
+        text.setCharacterSize(30);
         text.setPosition(x + 5, y + 5);
     }
     void draw(sf::RenderWindow& window) override
@@ -64,6 +64,10 @@ public:
     std::string getText() const
     {
         return text.getString();
+    }
+    void setText(const std::string str)
+    {
+        text.setString(str);
     }
 };
 #endif

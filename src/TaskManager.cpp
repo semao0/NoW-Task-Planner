@@ -18,19 +18,19 @@ void TaskManager::removeTask(const Task& task)
 }
 void TaskManager::checkDeadlines()
 {
-    for (auto* task : tasks)
+    for (auto task : tasks)
     {
-        if (!task->isDeadLineActive())
+        if (!task.isDeadLineActive())
         {
-            std::cout << "Дедлайн задачи \"" << task->getName() << "\" истек!" << std::endl;
+            std::cout << "Дедлайн задачи \"" << task.getName() << "\" истек!" << std::endl;
         }
         else
         {
-            std::cout << "Дедлайн задачи \"" << task->getName() << "\" еще не истек!" << std::endl;
+            std::cout << "Дедлайн задачи \"" << task.getName() << "\" еще не истек!" << std::endl;
         }
     }
 }
-const std::vector<Task*>& TaskManager::getTasks() const
+const std::vector<Task>& TaskManager::getTasks() const
 {
     return tasks;
 }
@@ -44,7 +44,7 @@ void TaskManager::saveTasks() const
 {
     json j = json::array();
 
-    for (const auto* task : tasks)
+    for (const auto task : tasks)
     {
         j.push_back(serializeTask(task));
     }
@@ -70,15 +70,15 @@ void TaskManager::loadTasks()
     }
 }
 
-json TaskManager::serializeTask(const Task* task) const
+json TaskManager::serializeTask(const Task task) const
 {
     json taskJson;
-    taskJson["name"] = task->getName();
-    taskJson["description"] = task->getDescription();
-    SaveYearMonthDayJson(task->getDeadline(), taskJson);
+    taskJson["name"] = task.getName();
+    taskJson["description"] = task.getDescription();
+    SaveYearMonthDayJson(task.getDeadline(), taskJson);
     taskJson["subtasks"] = json::array();
 
-    for (const auto* subtask : task->getSubtasks())
+    for (const auto subtask : task.getSubtasks())
     {
         taskJson["subtasks"].push_back(serializeTask(subtask));
     }
@@ -86,12 +86,12 @@ json TaskManager::serializeTask(const Task* task) const
     return taskJson;
 }
 
-Task* TaskManager::deserializeTask(const json& taskJson)
+Task TaskManager::deserializeTask(const json& taskJson)
 {
-    Task* task = new Task(taskJson["name"], taskJson["description"], LoadYearMonthDayJson(taskJson));
+    Task task(taskJson["name"], taskJson["description"], LoadYearMonthDayJson(taskJson));
 
-    for (const auto& subtasksJson : taskJson["subtasks"])
-        task->addSubtasks(deserializeTask(subtasksJson));
+    for (const auto subtasksJson : taskJson["subtasks"])
+        task.addSubtasks(deserializeTask(subtasksJson));
 
     return task;
 }

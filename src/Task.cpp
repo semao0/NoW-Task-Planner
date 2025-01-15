@@ -28,7 +28,7 @@ bool Task::isDeadLineActive() const
     return deadline >= now;
 }
 
-void Task::addSubtasks(Task* subtask)
+void Task::addSubtasks(const Task& subtask)
 {
     subtasks.push_back(subtask);
 }
@@ -53,7 +53,19 @@ std::chrono::year_month_day Task::getDeadline() const
     return deadline;
 }
 
-std::vector<Task*> Task::getSubtasks() const
+std::vector<Task> Task::getSubtasks() const
 {
     return subtasks;
+}
+bool Task::operator==(const Task& other) const
+{
+    if (this->name == other.name && this->subtasks == other.subtasks && this->description == other.description &&
+        this->deadline == other.deadline)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }

@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/home/semao0/TaskPlanner/src/Elements -I/home/semao0/TaskPlanner/src -I/home/semao0/TaskPlanner/src/Windows
 
-CXX_FLAGS = -std=gnu++20
+CXX_FLAGS = -g -std=gnu++20
 

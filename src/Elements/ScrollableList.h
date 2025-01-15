@@ -20,12 +20,13 @@ private:
     int scrollOffset;
     int itemHeight;
     sf::Vector2f position;
-
-    std::function<void(int)> onClickCallback;
+    int selectedIndex;
 
     void updateRenderedTasks();
 
 public:
+    std::function<void(int)> onClickCallback;
+
     ScrollableList(float x, float y, float width, float height, int itemHeight);
     void setTasks(TaskManager& tasks);
 

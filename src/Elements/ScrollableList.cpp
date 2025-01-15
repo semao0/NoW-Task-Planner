@@ -16,9 +16,9 @@ ScrollableList::ScrollableList(float x, float y, float width, float height, int 
     backgraund.setFillColor(sf::Color::White);
     backgraund.setOutlineThickness(2);
     backgraund.setOutlineColor(sf::Color::Black);
-    
+
     visibleItemCount = height / itemHeight;
-    
+
     updateRenderedTasks();
     if (!font.loadFromFile("resources/Arial.ttf"))
     {
@@ -37,9 +37,10 @@ void ScrollableList::updateRenderedTasks()
     renderedTasks.clear();
     for (int i = 0; i < visibleItemCount && (i + scrollOffset) < tasks.getCountTasks(); i++)
     {
-        std::string name = tasks.getTasks()[i + scrollOffset]->getName();
-        
-        if (font.getGlyph(name[0], 20, false).advance * name.size() > backgraund.getSize().x) {
+        std::string name = tasks.getTasks()[i + scrollOffset].getName();
+
+        if (font.getGlyph(name[0], 20, false).advance * name.size() > backgraund.getSize().x)
+        {
             name = name.substr(0, backgraund.getSize().x / font.getGlyph('A', 20, false).advance) + "...";
         }
 
@@ -52,13 +53,14 @@ void ScrollableList::updateRenderedTasks()
 
 void ScrollableList::draw(sf::RenderWindow& window)
 {
+
     window.draw(backgraund);
     for (const auto& text : renderedTasks)
     {
         window.draw(text);
     }
 
-    for(size_t i = 1; i < renderedTasks.size() + 1; i++)
+    for (size_t i = 1; i < renderedTasks.size() + 1; i++)
     {
         sf::RectangleShape line;
         line.setSize((sf::Vector2f(backgraund.getSize().x, 2)));
@@ -90,6 +92,7 @@ void ScrollableList::handleEvent(const sf::Event& event)
             int index = (mousePos.y - position.y) / itemHeight + scrollOffset;
             if (index >= 0 && index < tasks.getCountTasks() && onClickCallback)
             {
+                selectedIndex = index;
                 onClickCallback(index);
             }
         }
