@@ -10,6 +10,7 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Window/Window.hpp>
+#include <bits/chrono.h>
 #include <chrono>
 #include <cstddef>
 #include <ctime>
@@ -34,9 +35,10 @@ CalendareWidget::CalendareWidget(float x, float y, float width, float height)
     }
 
     title.setFont(font);
-    title.setString(monthNames[currentDate.month - 1] + " " + std::to_string(currentDate.year));
+    title.setString(monthNames[static_cast<unsigned>(currentDate.month()) - 1] + " " +
+                    std::to_string(static_cast<int>(currentDate.year())));
     title.setCharacterSize(20);
-    title.setPosition(position.x + width / 3, position.y + 5);
+    title.setPosition(position.x + width / 3.5, position.y + 5);
     title.setFillColor(sf::Color::Black);
 
     auto buttonnext =
@@ -49,6 +51,7 @@ CalendareWidget::CalendareWidget(float x, float y, float width, float height)
 
 void CalendareWidget::draw(sf::RenderWindow& window)
 {
+    selectedDay = static_cast<unsigned>(currentDate.day());
     window.draw(frame);
     window.draw(title);
     for (int i = 0; i < dayNames.size(); i++)
@@ -104,8 +107,11 @@ void CalendareWidget::handleEvent(const sf::Event& event)
             if (MousePos.x > x && MousePos.x < x + 30 && MousePos.y > y && MousePos.y < y + 30 && days[i] != 0)
             {
                 selectedDay = days[i];
-                currentDate.day = days[i];
-                std::cout << days[i] << "-" << currentDate.month << "-" << currentDate.year << std::endl;
+                currentDate = std::chrono::year_month_day{
+                    currentDate.year(), currentDate.month(), std::chrono::day{unsigned(days[i])}};
+                // currentDate.day() = std::chrono::day{unsigned(days[i])};
+                std::cout << days[i] << "-" << static_cast<unsigned>(currentDate.month()) << "-"
+                          << static_cast<int>(currentDate.year()) << std::endl;
             }
         }
     }
@@ -115,15 +121,16 @@ void CalendareWidget::handleEvent(const sf::Event& event)
 void CalendareWidget::updateCalendare()
 {
     std::vector<int> daysInMonth{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    if ((currentDate.year % 4 == 0 && currentDate.year % 100 != 0) || currentDate.year % 400 == 0)
+    if ((static_cast<int>(currentDate.year()) % 4 == 0 && (static_cast<int>(currentDate.year()) % 100 != 0) ||
+         (static_cast<int>(currentDate.year())) % 400 == 0))
     {
         daysInMonth[1] = 29;
     }
 
     std::tm firstday = {};
     firstday.tm_mday = 1;
-    firstday.tm_year = currentDate.year - 1900;
-    firstday.tm_mon = currentDate.month - 1;
+    firstday.tm_year = static_cast<int>(currentDate.year()) - 1900;
+    firstday.tm_mon = static_cast<unsigned>(currentDate.month()) - 1;
     std::mktime(&firstday);
 
     int startday = firstday.tm_wday;
@@ -136,42 +143,44 @@ void CalendareWidget::updateCalendare()
     days.clear();
     days.resize(startday - 1, 0);
 
-    for (int i = 1; i <= daysInMonth[currentDate.month - 1]; i++)
+    for (int i = 1; i <= daysInMonth[static_cast<unsigned>(currentDate.month()) - 1]; i++)
     {
         days.push_back(i);
     }
-    title.setString(monthNames[currentDate.month - 1] + " " + std::to_string(currentDate.year));
+    title.setString(monthNames[static_cast<unsigned>(currentDate.month()) - 1] + " " +
+                    std::to_string(static_cast<int>(currentDate.year())));
 }
 
-CalendareWidget::Date CalendareWidget::getCurrentDate()
+std::chrono::year_month_day CalendareWidget::getCurrentDate()
 {
     auto now = std::chrono::system_clock::now();
 
     std::time_t now_sec = std::chrono::system_clock::to_time_t(now);
     std::tm* time = std::localtime(&now_sec);
-    return {time->tm_mday, time->tm_mon + 1, time->tm_year + 1900};
+    return std::chrono::year_month_day{
+        std::chrono::year(time->tm_year + 1900), std::chrono::month(time->tm_mon + 1), std::chrono::day(time->tm_mday)};
 }
 
 void CalendareWidget::changeDate(const int count)
 {
-    currentDate.month += count;
-
-    if (currentDate.month > 12)
+    auto newdate = std::chrono::year_month_day{currentDate} + std::chrono::months{count};
+    if (newdate.ok())
     {
-        currentDate.month = 1;
-        currentDate.year++;
+        currentDate = newdate;
     }
-
-    if (currentDate.month <= 0)
+    else
     {
-        currentDate.month = 11;
-        currentDate.year--;
+        currentDate = std::chrono::year_month_day{newdate.year(), newdate.month(), std::chrono::day{1}};
     }
-
     updateCalendare();
 }
 
 std::chrono::year_month_day CalendareWidget::getSelectedDate() const
 {
-    return std::chrono::year_month_day{std::chrono::year(currentDate.year), std::chrono::month(currentDate.month), std::chrono::day(currentDate.day)};
+    return currentDate;
+}
+void CalendareWidget::setDate(const std::chrono::year_month_day Date)
+{
+    currentDate = std::chrono::year_month_day{Date};
+    updateCalendare();
 }

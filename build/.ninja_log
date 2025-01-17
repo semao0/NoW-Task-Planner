@@ -1,0 +1,12 @@
+# ninja log v5
+2832	3032	1737139899428011543	TaskPlanner	a07b3aeeadc7a5d4
+3	3142	1737138878779381650	CMakeFiles/TaskPlanner.dir/src/Windows/MainWindow.cpp.o	a6d1362853620895
+4	2832	1737139899222015685	CMakeFiles/TaskPlanner.dir/src/Elements/ScrollableList.cpp.o	329d685f5325c90
+3	1508	1737135961907540943	CMakeFiles/TaskPlanner.dir/src/main.cpp.o	4f071f655dfd01ab
+4	3123	1737138878760382674	CMakeFiles/TaskPlanner.dir/src/Windows/EditWindow.cpp.o	1fb97a2cd05bad7e
+3	1876	1737137047725933183	CMakeFiles/TaskPlanner.dir/src/TaskManager.cpp.o	fcdd44ebb44a36d9
+4	1920	1737138877556447595	CMakeFiles/TaskPlanner.dir/src/Elements/CalendareWidget.cpp.o	3bb413a032d041f
+4	3240	1737138878878376315	CMakeFiles/TaskPlanner.dir/src/Windows/CreateWindow.cpp.o	fc3890c73892d115
+4	794	1737135961195540638	CMakeFiles/TaskPlanner.dir/src/Task.cpp.o	1c6880007636ac4
+6	2859	1737139924074519104	CMakeFiles/TaskPlanner.dir/src/Elements/ScrollableList.cpp.o	329d685f5325c90
+2859	3039	1737139924260515412	TaskPlanner	a07b3aeeadc7a5d4

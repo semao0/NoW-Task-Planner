@@ -1,6 +1,7 @@
 #include "Task.h"
 #include <bits/chrono.h>
 #include <chrono>
+#include <cstddef>
 #include <iterator>
 
 Task::Task(const std::string& name, const std::string& description, std::chrono::year_month_day deadline)
@@ -8,6 +9,9 @@ Task::Task(const std::string& name, const std::string& description, std::chrono:
       deadline(deadline.year(), deadline.month(), deadline.day())
 {
 }
+
+Task::Task()
+{}
 
 void Task::setDeadLine(const std::chrono::year_month_day newDeadLine)
 {
@@ -68,4 +72,9 @@ bool Task::operator==(const Task& other) const
     {
         return false;
     }
+}
+
+bool Task::isEmpty()
+{
+    return name.empty() && description.empty();
 }

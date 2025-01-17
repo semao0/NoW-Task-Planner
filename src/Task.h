@@ -16,6 +16,7 @@ private:
 public:
     bool operator==(const Task& other) const;
     Task(const std::string& name, const std::string& description, std::chrono::year_month_day a);
+    Task();
 
     void setDeadLine(const std::chrono::year_month_day);
     std::chrono::days getTimeLeft() const;
@@ -27,5 +28,6 @@ public:
     std::string getDescription() const;
     std::chrono::year_month_day getDeadline() const;
     std::vector<Task> getSubtasks() const;
+    bool isEmpty();
 };
 #endif

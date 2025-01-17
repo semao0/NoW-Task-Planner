@@ -1,43 +1,49 @@
 [
 {
   "directory": "/home/semao0/TaskPlanner/build",
-  "command": "/usr/bin/clang++  -I/home/semao0/TaskPlanner/src/Elements -I/home/semao0/TaskPlanner/src -I/home/semao0/TaskPlanner/src/Windows -g -std=gnu++20 -o CMakeFiles/TaskPlanner.dir/src/main.cpp.o -c /home/semao0/TaskPlanner/src/main.cpp",
+  "command": "/usr/bin/clang++ -I/home/semao0/TaskPlanner/src/Elements -I/home/semao0/TaskPlanner/src -I/home/semao0/TaskPlanner/src/Windows -g -std=gnu++20 -o CMakeFiles/TaskPlanner.dir/src/main.cpp.o -c /home/semao0/TaskPlanner/src/main.cpp",
   "file": "/home/semao0/TaskPlanner/src/main.cpp",
   "output": "CMakeFiles/TaskPlanner.dir/src/main.cpp.o"
 },
 {
   "directory": "/home/semao0/TaskPlanner/build",
-  "command": "/usr/bin/clang++  -I/home/semao0/TaskPlanner/src/Elements -I/home/semao0/TaskPlanner/src -I/home/semao0/TaskPlanner/src/Windows -g -std=gnu++20 -o CMakeFiles/TaskPlanner.dir/src/Windows/MainWindow.cpp.o -c /home/semao0/TaskPlanner/src/Windows/MainWindow.cpp",
+  "command": "/usr/bin/clang++ -I/home/semao0/TaskPlanner/src/Elements -I/home/semao0/TaskPlanner/src -I/home/semao0/TaskPlanner/src/Windows -g -std=gnu++20 -o CMakeFiles/TaskPlanner.dir/src/Windows/MainWindow.cpp.o -c /home/semao0/TaskPlanner/src/Windows/MainWindow.cpp",
   "file": "/home/semao0/TaskPlanner/src/Windows/MainWindow.cpp",
   "output": "CMakeFiles/TaskPlanner.dir/src/Windows/MainWindow.cpp.o"
 },
 {
   "directory": "/home/semao0/TaskPlanner/build",
-  "command": "/usr/bin/clang++  -I/home/semao0/TaskPlanner/src/Elements -I/home/semao0/TaskPlanner/src -I/home/semao0/TaskPlanner/src/Windows -g -std=gnu++20 -o CMakeFiles/TaskPlanner.dir/src/Windows/CreateWindow.cpp.o -c /home/semao0/TaskPlanner/src/Windows/CreateWindow.cpp",
+  "command": "/usr/bin/clang++ -I/home/semao0/TaskPlanner/src/Elements -I/home/semao0/TaskPlanner/src -I/home/semao0/TaskPlanner/src/Windows -g -std=gnu++20 -o CMakeFiles/TaskPlanner.dir/src/Windows/CreateWindow.cpp.o -c /home/semao0/TaskPlanner/src/Windows/CreateWindow.cpp",
   "file": "/home/semao0/TaskPlanner/src/Windows/CreateWindow.cpp",
   "output": "CMakeFiles/TaskPlanner.dir/src/Windows/CreateWindow.cpp.o"
 },
 {
   "directory": "/home/semao0/TaskPlanner/build",
-  "command": "/usr/bin/clang++  -I/home/semao0/TaskPlanner/src/Elements -I/home/semao0/TaskPlanner/src -I/home/semao0/TaskPlanner/src/Windows -g -std=gnu++20 -o CMakeFiles/TaskPlanner.dir/src/Task.cpp.o -c /home/semao0/TaskPlanner/src/Task.cpp",
+  "command": "/usr/bin/clang++ -I/home/semao0/TaskPlanner/src/Elements -I/home/semao0/TaskPlanner/src -I/home/semao0/TaskPlanner/src/Windows -g -std=gnu++20 -o CMakeFiles/TaskPlanner.dir/src/Windows/EditWindow.cpp.o -c /home/semao0/TaskPlanner/src/Windows/EditWindow.cpp",
+  "file": "/home/semao0/TaskPlanner/src/Windows/EditWindow.cpp",
+  "output": "CMakeFiles/TaskPlanner.dir/src/Windows/EditWindow.cpp.o"
+},
+{
+  "directory": "/home/semao0/TaskPlanner/build",
+  "command": "/usr/bin/clang++ -I/home/semao0/TaskPlanner/src/Elements -I/home/semao0/TaskPlanner/src -I/home/semao0/TaskPlanner/src/Windows -g -std=gnu++20 -o CMakeFiles/TaskPlanner.dir/src/Task.cpp.o -c /home/semao0/TaskPlanner/src/Task.cpp",
   "file": "/home/semao0/TaskPlanner/src/Task.cpp",
   "output": "CMakeFiles/TaskPlanner.dir/src/Task.cpp.o"
 },
 {
   "directory": "/home/semao0/TaskPlanner/build",
-  "command": "/usr/bin/clang++  -I/home/semao0/TaskPlanner/src/Elements -I/home/semao0/TaskPlanner/src -I/home/semao0/TaskPlanner/src/Windows -g -std=gnu++20 -o CMakeFiles/TaskPlanner.dir/src/TaskManager.cpp.o -c /home/semao0/TaskPlanner/src/TaskManager.cpp",
+  "command": "/usr/bin/clang++ -I/home/semao0/TaskPlanner/src/Elements -I/home/semao0/TaskPlanner/src -I/home/semao0/TaskPlanner/src/Windows -g -std=gnu++20 -o CMakeFiles/TaskPlanner.dir/src/TaskManager.cpp.o -c /home/semao0/TaskPlanner/src/TaskManager.cpp",
   "file": "/home/semao0/TaskPlanner/src/TaskManager.cpp",
   "output": "CMakeFiles/TaskPlanner.dir/src/TaskManager.cpp.o"
 },
 {
   "directory": "/home/semao0/TaskPlanner/build",
-  "command": "/usr/bin/clang++  -I/home/semao0/TaskPlanner/src/Elements -I/home/semao0/TaskPlanner/src -I/home/semao0/TaskPlanner/src/Windows -g -std=gnu++20 -o CMakeFiles/TaskPlanner.dir/src/Elements/ScrollableList.cpp.o -c /home/semao0/TaskPlanner/src/Elements/ScrollableList.cpp",
+  "command": "/usr/bin/clang++ -I/home/semao0/TaskPlanner/src/Elements -I/home/semao0/TaskPlanner/src -I/home/semao0/TaskPlanner/src/Windows -g -std=gnu++20 -o CMakeFiles/TaskPlanner.dir/src/Elements/ScrollableList.cpp.o -c /home/semao0/TaskPlanner/src/Elements/ScrollableList.cpp",
   "file": "/home/semao0/TaskPlanner/src/Elements/ScrollableList.cpp",
   "output": "CMakeFiles/TaskPlanner.dir/src/Elements/ScrollableList.cpp.o"
 },
 {
   "directory": "/home/semao0/TaskPlanner/build",
-  "command": "/usr/bin/clang++  -I/home/semao0/TaskPlanner/src/Elements -I/home/semao0/TaskPlanner/src -I/home/semao0/TaskPlanner/src/Windows -g -std=gnu++20 -o CMakeFiles/TaskPlanner.dir/src/Elements/CalendareWidget.cpp.o -c /home/semao0/TaskPlanner/src/Elements/CalendareWidget.cpp",
+  "command": "/usr/bin/clang++ -I/home/semao0/TaskPlanner/src/Elements -I/home/semao0/TaskPlanner/src -I/home/semao0/TaskPlanner/src/Windows -g -std=gnu++20 -o CMakeFiles/TaskPlanner.dir/src/Elements/CalendareWidget.cpp.o -c /home/semao0/TaskPlanner/src/Elements/CalendareWidget.cpp",
   "file": "/home/semao0/TaskPlanner/src/Elements/CalendareWidget.cpp",
   "output": "CMakeFiles/TaskPlanner.dir/src/Elements/CalendareWidget.cpp.o"
 }

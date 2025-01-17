@@ -48,5 +48,12 @@ public:
             }
         }
     }
+    void handleResizeWithView(sf::RenderWindow& window, const sf::Event& event) {
+    sf::View view = window.getView();
+    view.setSize(event.size.width, event.size.height);
+    view.setCenter(event.size.width / 2.0f, event.size.height / 2.0f);
+    window.setView(view);
+}
+
 };
 #endif

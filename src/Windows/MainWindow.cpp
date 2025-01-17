@@ -10,17 +10,14 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <iostream>
+#include "EditWindow.h"
 #include <memory>
 
-MainWindow::MainWindow() : window(sf::VideoMode(1000, 700), "NoW")
+MainWindow::MainWindow() : window(sf::VideoMode(1000, 700), "NoW", sf::Style::Titlebar | sf::Style::Close)
 {
     Scroll = std::make_shared<ScrollableList>(20, 20, 600, 600, 100);
-    Scroll->onClickCallback = [this](int index)
-    {
-        auto selectedTask = tasks.getTasks()[index];
-        
-    };
-    auto button = std::make_shared<Button>(
+    Scroll->onClickCallback = [this](int index) { selectedTask = tasks.getTasks()[index]; };
+    auto buttonCreate = std::make_shared<Button>(
         810,
         15,
         170,
@@ -32,7 +29,27 @@ MainWindow::MainWindow() : window(sf::VideoMode(1000, 700), "NoW")
             window->run();
         },
         20);
-    MainElemets.addElement(button);
+    auto buttonEdit = std::make_shared<Button>(
+        810,
+        70,
+        170,
+        40,
+        "Edit task",
+        [this]()
+        {
+            if (!selectedTask.isEmpty())
+            {
+                auto window = std::make_shared<EditWindow>(selectedTask);
+                window->run();
+            }
+            else
+            {
+                std::cout << "SelectedTasks clear!" << std::endl;
+            }
+        },
+        20);
+    MainElemets.addElement(buttonEdit);
+    MainElemets.addElement(buttonCreate);
     MainElemets.addElement(Scroll);
     tasks.loadTasks();
     Scroll->setTasks(tasks);

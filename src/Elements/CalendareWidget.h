@@ -13,12 +13,6 @@
 class CalendareWidget : public guiElement
 {
 private:
-    struct Date
-    {
-        int day;
-        int month;
-        int year;
-    };
     sf::Vector2f position, size;
     int selectedDay;
     sf::RectangleShape frame;
@@ -38,13 +32,14 @@ private:
                                         "November",
                                         "December"};
     std::vector<int> days;
-    Date currentDate;
+    std::chrono::year_month_day currentDate;
     void updateCalendare();
-    Date getCurrentDate();
+    std::chrono::year_month_day getCurrentDate();
     void changeDate(const int count);
     guiManager elements;
 
 public:
+    void setDate(std::chrono::year_month_day Date);
     CalendareWidget(float x, float y, float width, float height);
     void draw(sf::RenderWindow& window) override;
     void handleEvent(const sf::Event& event) override;

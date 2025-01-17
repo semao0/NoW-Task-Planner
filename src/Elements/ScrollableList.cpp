@@ -60,12 +60,24 @@ void ScrollableList::draw(sf::RenderWindow& window)
         window.draw(text);
     }
 
-    for (size_t i = 1; i < renderedTasks.size() + 1; i++)
+    for (size_t i = 0; i < renderedTasks.size() + 1; i++)
     {
         sf::RectangleShape line;
         line.setSize((sf::Vector2f(backgraund.getSize().x, 2)));
         line.setPosition(position.x, position.y + i * itemHeight);
         line.setFillColor(sf::Color::Black);
+        if (i == 0)
+        {
+            line.setSize((sf::Vector2f(backgraund.getSize().x, 0)));
+        }
+        if (i == 0 && (selectedIndex == i + scrollOffset || selectedIndex + 1 == i + scrollOffset))
+        {
+            line.setSize((sf::Vector2f(backgraund.getSize().x, 1)));
+        }
+        else if (selectedIndex == i + scrollOffset || selectedIndex + 1 == i + scrollOffset)
+        {
+            line.setSize((sf::Vector2f(backgraund.getSize().x, 3)));
+        }
         window.draw(line);
     }
 }

@@ -14,11 +14,12 @@ private:
     sf::RenderWindow window;
 
 public:
-    EditWindow();
+    EditWindow(Task task);
     void run();
 
 private:
     void render();
     void handleEvents();
+    Task selectedTask;
 };
 #endif

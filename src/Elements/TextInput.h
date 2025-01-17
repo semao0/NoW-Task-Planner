@@ -29,7 +29,7 @@ public:
         }
         text.setFont(font);
         text.setFillColor(sf::Color::Black);
-        text.setCharacterSize(30);
+        text.setCharacterSize(20);
         text.setPosition(x + 5, y + 5);
     }
     void draw(sf::RenderWindow& window) override
