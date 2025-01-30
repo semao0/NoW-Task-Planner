@@ -15,6 +15,7 @@ private:
 
 public:
     bool operator==(const Task& other) const;
+    Task& operator=(const Task& other);
     Task(const std::string& name, const std::string& description, std::chrono::year_month_day a);
     Task();
 

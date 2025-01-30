@@ -32,5 +32,6 @@ public:
 
     void draw(sf::RenderWindow& window) override;
     void handleEvent(const sf::Event& event) override;
+    int getIndex();
 };
 #endif

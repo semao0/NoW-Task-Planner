@@ -14,7 +14,7 @@
 #include <memory>
 
 CreateWindow::CreateWindow(TaskManager& tasks, ScrollableList& Scroll)
-    : window(sf::VideoMode(1000, 700), "NoW - Create task")
+    : window(sf::VideoMode(1000, 700), "NoW - Create task", sf::Style::Titlebar | sf::Style::Close)
 {
     auto nameinput = std::make_shared<TextInput>(400, 100, 450, 35);
     CreateElemets.addElement(nameinput);
@@ -37,7 +37,7 @@ CreateWindow::CreateWindow(TaskManager& tasks, ScrollableList& Scroll)
         170,
         40,
         "        Create",
-        [nameinput, descinput, calendarewidget, &tasks = tasks, &window = window, &Scroll = Scroll]()
+        [nameinput, descinput, calendarewidget, &tasks, &window = window, &Scroll = Scroll]()
         {
             Task newtask{nameinput->getText(), descinput->getText(), calendarewidget->getSelectedDate()};
             tasks.addTask(newtask);

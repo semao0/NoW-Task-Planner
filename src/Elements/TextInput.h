@@ -14,6 +14,7 @@ private:
     sf::Font font;
     sf::Text text;
     bool isActive;
+    std::string fulltext;
 
 public:
     TextInput(float x, float y, float width, float height) : isActive(false)
@@ -58,6 +59,9 @@ public:
             else if (event.text.unicode < 128)
             {
                 text.setString(text.getString() + static_cast<char>(event.text.unicode));
+
+                fulltext = text.getString();
+
             }
         }
     }
@@ -65,6 +69,7 @@ public:
     {
         return text.getString();
     }
+
     void setText(const std::string str)
     {
         text.setString(str);

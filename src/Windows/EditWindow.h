@@ -14,12 +14,12 @@ private:
     sf::RenderWindow window;
 
 public:
-    EditWindow(Task task);
+    EditWindow(Task &task, TaskManager& tasks, ScrollableList& Scroll);
     void run();
 
 private:
     void render();
     void handleEvents();
-    Task selectedTask;
+    Task &selectedTask;
 };
 #endif

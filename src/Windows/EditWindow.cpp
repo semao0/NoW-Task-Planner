@@ -13,7 +13,8 @@
 #include <chrono>
 #include <iostream>
 #include <memory>
-EditWindow::EditWindow(Task task) : window(sf::VideoMode(1000, 700), "NoW - Edit task"), selectedTask(task)
+EditWindow::EditWindow(Task& task, TaskManager& tasks, ScrollableList& Scroll)
+    : window(sf::VideoMode(1000, 700), "NoW - Edit task", sf::Style::Titlebar | sf::Style::Close), selectedTask(task)
 {
     auto nameinput = std::make_shared<TextInput>(400, 100, 450, 40);
     nameinput->setText(selectedTask.getName());
@@ -39,7 +40,16 @@ EditWindow::EditWindow(Task task) : window(sf::VideoMode(1000, 700), "NoW - Edit
         170,
         40,
         "           Save",
-        []() {},
+        [&task, nameinput, descinput, calendarewidget, this, &tasks, &Scroll]()
+        {
+            Task newtask(nameinput->getText(), descinput->getText(), calendarewidget->getSelectedDate());
+            tasks.removeTask(task);
+            tasks.addTask(newtask);
+            tasks.clearTasks();
+            tasks.saveTasks();
+            window.close();
+            Scroll.setTasks(tasks);
+        },
         20);
     EditElemets.addElement(buttonSave);
 }

@@ -1,28 +1,25 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-#include "ScrollableList.h"
+#ifndef INFOWINDOW_H
+#define INFOWINDOW_H
 #include "guiManager.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include "TaskManager.h"
+#include "ScrollableList.h"
 
-class MainWindow
+class InfoWindow
 {
 private:
-    guiManager MainElemets;
+    guiManager InfoElemets;
     sf::RenderWindow window;
-    TaskManager tasks;
-    std::shared_ptr<ScrollableList> Scroll;
-    Task& selectedTask;
 
 public:
-    MainWindow();
+    InfoWindow(Task& task);
     void run();
 
 private:
     void render();
     void handleEvents();
-    Task dummyTask;
+    Task &selectedTask;
 };
 #endif

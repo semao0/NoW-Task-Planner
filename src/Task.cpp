@@ -10,8 +10,7 @@ Task::Task(const std::string& name, const std::string& description, std::chrono:
 {
 }
 
-Task::Task()
-{}
+Task::Task() {}
 
 void Task::setDeadLine(const std::chrono::year_month_day newDeadLine)
 {
@@ -72,6 +71,14 @@ bool Task::operator==(const Task& other) const
     {
         return false;
     }
+}
+
+Task& Task::operator=(const Task& other)
+{
+    this->name = other.name;
+    this->description = other.description;
+    this->deadline = other.deadline;
+    return *this;
 }
 
 bool Task::isEmpty()

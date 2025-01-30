@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # CMakeLists.txt
-add_executable(TaskPlanner src/main.cpp src/Windows/MainWindow.cpp src/Windows/CreateWindow.cpp src/Windows/EditWindow.cpp src/Task.cpp src/TaskManager.cpp src/Elements/ScrollableList.cpp src/Elements/CalendareWidget.cpp)
+add_executable(TaskPlanner src/main.cpp src/Windows/MainWindow.cpp src/Windows/InfoWindow.cpp src/Windows/CreateWindow.cpp src/Windows/EditWindow.cpp src/Task.cpp src/TaskManager.cpp src/Elements/ScrollableList.cpp src/Elements/CalendareWidget.cpp)
 
 # Подключаем SFML
 find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)

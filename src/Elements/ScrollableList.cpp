@@ -110,3 +110,7 @@ void ScrollableList::handleEvent(const sf::Event& event)
         }
     }
 }
+int ScrollableList::getIndex()
+{
+    return selectedIndex;
+}

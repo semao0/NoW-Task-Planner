@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "CreateWindow.h"
 #include "ScrollableList.h"
+#include "InfoWindow.h"
 #include "TaskManager.h"
 #include "guiManager.h"
 #include "Button.h"
@@ -13,7 +14,8 @@
 #include "EditWindow.h"
 #include <memory>
 
-MainWindow::MainWindow() : window(sf::VideoMode(1000, 700), "NoW", sf::Style::Titlebar | sf::Style::Close)
+MainWindow::MainWindow()
+    : window(sf::VideoMode(1000, 700), "NoW", sf::Style::Titlebar | sf::Style::Close), selectedTask(dummyTask)
 {
     Scroll = std::make_shared<ScrollableList>(20, 20, 600, 600, 100);
     Scroll->onClickCallback = [this](int index) { selectedTask = tasks.getTasks()[index]; };
@@ -25,6 +27,7 @@ MainWindow::MainWindow() : window(sf::VideoMode(1000, 700), "NoW", sf::Style::Ti
         "Create new task",
         [this, &Scroll = Scroll]()
         {
+            Scroll->onClickCallback(Scroll->getIndex());
             auto window = std::make_shared<CreateWindow>(tasks, *Scroll);
             window->run();
         },
@@ -37,9 +40,11 @@ MainWindow::MainWindow() : window(sf::VideoMode(1000, 700), "NoW", sf::Style::Ti
         "Edit task",
         [this]()
         {
+            Scroll->onClickCallback(Scroll->getIndex());
+
             if (!selectedTask.isEmpty())
             {
-                auto window = std::make_shared<EditWindow>(selectedTask);
+                auto window = std::make_shared<EditWindow>(selectedTask, tasks, *Scroll);
                 window->run();
             }
             else
@@ -48,12 +53,34 @@ MainWindow::MainWindow() : window(sf::VideoMode(1000, 700), "NoW", sf::Style::Ti
             }
         },
         20);
+    auto buttonInfo = std::make_shared<Button>(
+        810,
+        645,
+        170,
+        40,
+        "       Info",
+        [this, &Scroll = Scroll]()
+        {
+            Scroll->onClickCallback(Scroll->getIndex());
+
+            if (!selectedTask.isEmpty())
+            {
+                auto window = std::make_shared<InfoWindow>(selectedTask);
+                window->run();
+            }
+            else
+            {
+                std::cout << "SelectedTasks clear!" << std::endl;
+            }
+        },
+        20);
+    MainElemets.addElement(buttonInfo);
     MainElemets.addElement(buttonEdit);
     MainElemets.addElement(buttonCreate);
     MainElemets.addElement(Scroll);
     tasks.loadTasks();
     Scroll->setTasks(tasks);
-    tasks.saveTasks();
+    selectedTask = tasks.getTasks()[0];
 }
 
 void MainWindow::run()
