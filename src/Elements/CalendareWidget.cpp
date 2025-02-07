@@ -180,7 +180,6 @@ std::chrono::year_month_day CalendareWidget::getSelectedDate() const
     return currentDate;
 }
 
-
 void CalendareWidget::setDate(const std::chrono::year_month_day Date)
 {
     currentDate = std::chrono::year_month_day{Date};

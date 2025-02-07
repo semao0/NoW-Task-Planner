@@ -1,10 +1,11 @@
 {
     "editor.defaultFormatter": "xaver.clang-format",
     "editor.formatOnSave": true,
-    "cmake.generator": "Ninja", // или "Unix Makefiles", если не установлен Ninja
-    "cmake.buildDirectory": "${workspaceFolder}/build",
-    "cmake.configureArgs": [
-      "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
-    ],
+    "cmake.generator": "Ninja",
+    "cmake.configureSettings": {
+      "CMAKE_C_COMPILER": "/usr/bin/clang",
+      "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
+    },
     "cmake.sourceDirectory": "${workspaceFolder}"
-  }
+}
+  

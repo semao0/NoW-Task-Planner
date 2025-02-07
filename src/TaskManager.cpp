@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
+#include <stdexcept>
 
 using json = nlohmann::json;
 
@@ -14,7 +15,11 @@ void TaskManager::addTask(const Task& task)
 }
 void TaskManager::removeTask(const Task& task)
 {
-    tasks.erase(std::remove(tasks.begin(), tasks.end(), task), tasks.end());
+    auto it = std::remove(tasks.begin(), tasks.end(), task);
+    if (it != tasks.end())
+    {
+        tasks.erase(it, tasks.end());
+    }
 }
 void TaskManager::checkDeadlines()
 {
@@ -50,6 +55,10 @@ void TaskManager::saveTasks() const
     }
 
     std::ofstream file("tasks.json", std::ios::trunc);
+    if (!file.is_open())
+    {
+        throw std::runtime_error("Не удалость открыть файл tasks.json для записи!");
+    }
     file << j.dump(4);
     file.close();
 }
@@ -58,15 +67,23 @@ void TaskManager::loadTasks()
 {
     std::ifstream file("tasks.json");
 
-    if (file)
+    if (!file.is_open())
     {
-        json j;
-        file >> j;
+        throw std::runtime_error("Не удалость открыть файл tasks.json для чтения!");
+    }
+    if (file.peek() == std::ifstream::traits_type::eof())
+    {
         file.close();
-        file.clear();
+        return;
+    }
+    json j;
+    file >> j;
+    file.close();
+    file.clear();
 
-        for (const auto& taskJson : j)
-            tasks.push_back(deserializeTask(taskJson));
+    for (const auto& taskJson : j)
+    {
+        tasks.push_back(deserializeTask(taskJson));
     }
 }
 
@@ -88,10 +105,24 @@ json TaskManager::serializeTask(const Task task) const
 
 Task TaskManager::deserializeTask(const json& taskJson)
 {
-    Task task(taskJson["name"], taskJson["description"], LoadYearMonthDayJson(taskJson));
+    std::chrono::year_month_day deadline;
+    if (taskJson.contains("year") && taskJson.contains("day"), taskJson.contains("month"))
+    {
+        deadline = LoadYearMonthDayJson(taskJson);
+    }
+    else
+    {
+        deadline = {std::chrono::year(1970), std::chrono::month(1), std::chrono::day(1)};
+    }
 
-    for (const auto subtasksJson : taskJson["subtasks"])
-        task.addSubtasks(deserializeTask(subtasksJson));
+    Task task(taskJson["name"], taskJson["description"], deadline);
+    if (taskJson.contains("subtasks") && taskJson["subtasks"].is_array())
+    {
+        for (const auto subtasksJson : taskJson["subtasks"])
+        {
+            task.addSubtasks(deserializeTask(subtasksJson));
+        }
+    }
 
     return task;
 }
@@ -102,11 +133,17 @@ void TaskManager::SaveYearMonthDayJson(const std::chrono::year_month_day& deadli
     taskJson["month"] = unsigned(deadline.month());
     taskJson["day"] = unsigned(deadline.day());
 }
+
 std::chrono::year_month_day TaskManager::LoadYearMonthDayJson(const nlohmann::json& taskJson) const
 {
     int year = taskJson["year"];
     unsigned month = taskJson["month"];
     unsigned day = taskJson["day"];
+
+    if (month < 1 || month > 12 || day < 1 || day > 31)
+    {
+        throw std::invalid_argument("Некоректная дата в JSON!");
+    }
     return std::chrono::year_month_day{std::chrono::year{year}, std::chrono::month{month}, std::chrono::day{day}};
 }
 
@@ -115,4 +152,16 @@ void TaskManager::clearTasks()
     std::ofstream file("tasks.json", std::ios::trunc);
     file << "[]";
     file.close();
+}
+
+void TaskManager::updateTask(const Task& updatedTask)
+{
+    for(auto& task : tasks)
+    {
+        if(task == updatedTask)
+        {
+            task = updatedTask;
+            return;
+        }
+    }
 }

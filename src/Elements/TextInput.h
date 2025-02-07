@@ -11,6 +11,7 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/View.hpp>
 #include <SFML/Window/Event.hpp>
+#include <SFML/Window/Mouse.hpp>
 #include <chrono>
 class TextInput : public guiElement
 {
@@ -57,7 +58,7 @@ public:
     }
     void handleEvent(const sf::Event& event) override
     {
-        if (event.type == sf::Event::MouseButtonPressed)
+        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
         {
             sf::Vector2f mousePos(event.mouseButton.x, event.mouseButton.y);
             isActive = box.getGlobalBounds().contains(mousePos);
@@ -85,7 +86,7 @@ public:
 
                 float textWight = text.getLocalBounds().width;
 
-                if (textWight > box.getSize().x - 10)
+                if (textWight > box.getSize().x - 15)
                 {
                     viewOffset += font.getGlyph(str[str.getSize() - 1], text.getCharacterSize(), false).advance;
                 }
@@ -97,11 +98,11 @@ public:
         return text.getString();
     }
 
-    void setText(const std::string str)
+    void setText(const std::string& str)
     {
         text.setString(str);
         float textWhight = text.getLocalBounds().width;
-        viewOffset = std::max(0.0f, textWhight -(box.getSize().x- 10));
+        viewOffset = std::max(0.0f, textWhight - (box.getSize().x - 10));
     }
 };
 #endif

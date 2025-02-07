@@ -18,7 +18,17 @@ MainWindow::MainWindow()
     : window(sf::VideoMode(1000, 700), "NoW", sf::Style::Titlebar | sf::Style::Close), selectedTask(dummyTask)
 {
     Scroll = std::make_shared<ScrollableList>(20, 20, 600, 600, 100);
-    Scroll->onClickCallback = [this](int index) { selectedTask = tasks.getTasks()[index]; };
+    Scroll->onClickCallback = [this](int index)
+    {
+        if (!tasks.getTasks().empty())
+        {
+            selectedTask = tasks.getTasks()[index];
+        }
+        else{
+            selectedTask = dummyTask;
+        }
+    };
+
     auto buttonCreate = std::make_shared<Button>(
         810,
         15,
@@ -28,7 +38,7 @@ MainWindow::MainWindow()
         [this, &Scroll = Scroll]()
         {
             Scroll->onClickCallback(Scroll->getIndex());
-            auto window = std::make_shared<CreateWindow>(tasks, *Scroll);
+            auto window = std::make_shared<CreateWindow>(tasks, *Scroll, true);
             window->run();
         },
         20);
@@ -59,13 +69,13 @@ MainWindow::MainWindow()
         170,
         40,
         "       Info",
-        [this, &Scroll = Scroll]()
+        [this, &Scroll = Scroll, &tasks = tasks]()
         {
             Scroll->onClickCallback(Scroll->getIndex());
 
             if (!selectedTask.isEmpty())
             {
-                auto window = std::make_shared<InfoWindow>(selectedTask);
+                auto window = std::make_shared<InfoWindow>(selectedTask, *Scroll, tasks, false);
                 window->run();
             }
             else
@@ -80,7 +90,6 @@ MainWindow::MainWindow()
     MainElemets.addElement(Scroll);
     tasks.loadTasks();
     Scroll->setTasks(tasks);
-    selectedTask = tasks.getTasks()[0];
 }
 
 void MainWindow::run()

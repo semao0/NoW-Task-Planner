@@ -15,6 +15,7 @@ private:
 public:
     void addTask(const Task& task);
     void removeTask(const Task& task);
+    void updateTask(const Task& updatedTask);
     void checkDeadlines();
     const std::vector<Task>& getTasks() const;
     const int getCountTasks() const;
@@ -27,5 +28,6 @@ public:
     Task deserializeTask(const nlohmann::json& taskJson);
     void SaveYearMonthDayJson(const std::chrono::year_month_day& deadline, nlohmann::json& taskJson) const;
     std::chrono::year_month_day LoadYearMonthDayJson(const nlohmann::json& taskJson) const;
+
 };
 #endif

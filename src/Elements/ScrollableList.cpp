@@ -1,4 +1,5 @@
 #include "ScrollableList.h"
+#include "Task.h"
 #include "TaskManager.h"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/PrimitiveType.hpp>
@@ -31,6 +32,18 @@ void ScrollableList::setTasks(TaskManager& tasks)
     this->tasks = tasks;
     updateRenderedTasks();
 }
+
+void ScrollableList::setTasks(std::vector<Task> tasks)
+{
+    TaskManager subtasks;
+    for(auto task : tasks)
+    {
+        subtasks.addTask(task);
+    }
+    this->tasks = subtasks;
+    updateRenderedTasks();
+}
+
 
 void ScrollableList::updateRenderedTasks()
 {

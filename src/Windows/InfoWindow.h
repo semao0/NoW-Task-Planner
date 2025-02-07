@@ -14,12 +14,16 @@ private:
     sf::RenderWindow window;
 
 public:
-    InfoWindow(Task& task);
+    InfoWindow(Task& task, ScrollableList& Scroll, TaskManager& tasks, bool IsSubTask);
     void run();
 
 private:
     void render();
     void handleEvents();
-    Task &selectedTask;
+    Task& selectedTask;
+    Task& selectedSubTask;
+    std::shared_ptr<ScrollableList> ScrollInfo;
+    Task dummyTask;
+    TaskManager subtasks;
 };
 #endif

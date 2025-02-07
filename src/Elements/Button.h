@@ -14,7 +14,13 @@ private:
     std::function<void()> onClick;
 
 public:
-    Button(float x, float y, float width, float height, const std::string& text, const std::function<void()> callback, int charsize)
+    Button(float x,
+           float y,
+           float width,
+           float height,
+           const std::string& text,
+           const std::function<void()> callback,
+           int charsize)
         : onClick(callback)
     {
         box.setPosition(x, y);
@@ -48,12 +54,12 @@ public:
             }
         }
     }
-    void handleResizeWithView(sf::RenderWindow& window, const sf::Event& event) {
-    sf::View view = window.getView();
-    view.setSize(event.size.width, event.size.height);
-    view.setCenter(event.size.width / 2.0f, event.size.height / 2.0f);
-    window.setView(view);
-}
-
+    void handleResizeWithView(sf::RenderWindow& window, const sf::Event& event)
+    {
+        sf::View view = window.getView();
+        view.setSize(event.size.width, event.size.height);
+        view.setCenter(event.size.width / 2.0f, event.size.height / 2.0f);
+        window.setView(view);
+    }
 };
 #endif

@@ -14,7 +14,7 @@ private:
     sf::RenderWindow window;
 
 public:
-    CreateWindow(TaskManager &tasks, ScrollableList& Scroll);
+    CreateWindow(TaskManager& tasks, ScrollableList& Scroll, bool isMain, Task* MainTask = nullptr);
     void run();
 
 private:

@@ -29,6 +29,6 @@ public:
     std::string getDescription() const;
     std::chrono::year_month_day getDeadline() const;
     std::vector<Task> getSubtasks() const;
-    bool isEmpty();
+    bool isEmpty() const;
 };
 #endif

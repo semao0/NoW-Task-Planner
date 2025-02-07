@@ -62,8 +62,7 @@ std::vector<Task> Task::getSubtasks() const
 }
 bool Task::operator==(const Task& other) const
 {
-    if (this->name == other.name && this->subtasks == other.subtasks && this->description == other.description &&
-        this->deadline == other.deadline)
+    if (this->name == other.name && this->description == other.description && this->deadline == other.deadline)
     {
         return true;
     }
@@ -78,10 +77,17 @@ Task& Task::operator=(const Task& other)
     this->name = other.name;
     this->description = other.description;
     this->deadline = other.deadline;
+
+    this->subtasks.clear();
+    for (auto task : other.subtasks)
+    {
+        this->addSubtasks(task);
+    }
+
     return *this;
 }
 
-bool Task::isEmpty()
+bool Task::isEmpty() const
 {
     return name.empty() && description.empty();
 }

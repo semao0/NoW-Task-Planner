@@ -6,6 +6,7 @@
 #include "guiManager.h"
 #include "Button.h"
 #include "TextInput.h"
+#include "CreateWindow.h"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
@@ -17,16 +18,22 @@
 #include <sstream>
 #include <string>
 #include <type_traits>
-InfoWindow::InfoWindow(Task& task) : window(sf::VideoMode(1000, 700), "NoW - Edit task", sf::Style::Titlebar | sf::Style::Close), selectedTask(task)
+InfoWindow::InfoWindow(Task& task, ScrollableList& Scroll, TaskManager& tasks, bool IsSubTask)
+    : window(sf::VideoMode(1000, 700), "NoW - Task Information", sf::Style::Titlebar | sf::Style::Close),
+      selectedTask(task), selectedSubTask(dummyTask)
 {
-    auto namelabeltask = std::make_shared<Label>(400, 100, 100, 40, selectedTask.getName());
+    for (auto sub : task.getSubtasks())
+    {
+        subtasks.addTask(sub);
+    }
+    auto namelabeltask = std::make_shared<Label>(400, 100, 100, 40, selectedTask.getName(), false);
     InfoElemets.addElement(namelabeltask);
-    auto namelabel = std::make_shared<Label>(100, 100, 100, 40, "Name:");
+    auto namelabel = std::make_shared<Label>(100, 100, 100, 40, "Name:", true);
     InfoElemets.addElement(namelabel);
 
-    auto desclabeltask = std::make_shared<Label>(400, 200, 100, 40, selectedTask.getDescription());
+    auto desclabeltask = std::make_shared<Label>(400, 200, 100, 40, selectedTask.getDescription(), false);
     InfoElemets.addElement(desclabeltask);
-    auto desclabel = std::make_shared<Label>(100, 200, 100, 40, "Description:");
+    auto desclabel = std::make_shared<Label>(100, 200, 100, 40, "Description:", true);
     InfoElemets.addElement(desclabel);
 
     std::ostringstream deadline;
@@ -35,14 +42,70 @@ InfoWindow::InfoWindow(Task& task) : window(sf::VideoMode(1000, 700), "NoW - Edi
              << static_cast<int>(selectedTask.getDeadline().year());
     std::string deadlinestr = deadline.str();
 
-    auto deadlinelabeltask = std::make_shared<Label>(400, 300, 100, 40, deadlinestr);
+    auto deadlinelabeltask = std::make_shared<Label>(400, 300, 100, 40, deadlinestr, false);
     InfoElemets.addElement(deadlinelabeltask);
-    auto deadlinelabel = std::make_shared<Label>(100, 300, 100, 40, "Deadline:");
+    auto deadlinelabel = std::make_shared<Label>(100, 300, 100, 40, "Deadline:", true);
     InfoElemets.addElement(deadlinelabel);
 
     auto buttonSave =
         std::make_shared<Button>(810, 630, 170, 40, "           Back", [&window = window]() { window.close(); }, 20);
     InfoElemets.addElement(buttonSave);
+
+    if (!IsSubTask)
+    {
+        auto buttonInfo = std::make_shared<Button>(
+            810,
+            530,
+            170,
+            40,
+            "       Info",
+            [this, &tasks = tasks]()
+            {
+                ScrollInfo->onClickCallback(ScrollInfo->getIndex());
+
+                if (!selectedSubTask.isEmpty())
+                {
+                    auto window = std::make_shared<InfoWindow>(selectedSubTask, *ScrollInfo, tasks, true);
+                    window->run();
+                }
+                else
+                {
+                    std::cout << "SelectedSubTask clear!" << std::endl;
+                }
+            },
+            20);
+        InfoElemets.addElement(buttonInfo);
+
+        ScrollInfo = std::make_shared<ScrollableList>(100, 400, 600, 270, 90);
+        ScrollInfo->onClickCallback = [this](int index)
+        {
+            if (!subtasks.getTasks().empty())
+            {
+                selectedSubTask = subtasks.getTasks()[index];
+            }
+            else
+            {
+                selectedSubTask = dummyTask;
+            }
+        };
+        ScrollInfo->setTasks(task.getSubtasks());
+        InfoElemets.addElement(ScrollInfo);
+
+        auto buttonCreateSubtask = std::make_shared<Button>(
+            810,
+            580,
+            170,
+            40,
+            "Create subtask",
+            [&Scroll = Scroll, &task = task, &tasks = tasks, this]()
+            {
+                Scroll.onClickCallback(Scroll.getIndex());
+                auto window = std::make_shared<CreateWindow>(tasks, *ScrollInfo, false, &task);
+                window->run();
+            },
+            20);
+        InfoElemets.addElement(buttonCreateSubtask);
+    }
 }
 
 void InfoWindow::run()

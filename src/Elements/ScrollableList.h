@@ -29,6 +29,7 @@ public:
 
     ScrollableList(float x, float y, float width, float height, int itemHeight);
     void setTasks(TaskManager& tasks);
+    void setTasks(std::vector<Task>);
 
     void draw(sf::RenderWindow& window) override;
     void handleEvent(const sf::Event& event) override;
