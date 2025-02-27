@@ -1,85 +1,32 @@
-[
-    {
-        "day": 7,
-        "description": "",
-        "month": 2,
-        "name": "3",
-        "subtasks": [
-            {
-                "day": 7,
-                "description": "",
-                "month": 2,
-                "name": "1",
-                "subtasks": [],
-                "year": 2025
-            }
-        ],
-        "year": 2025
-    },
-    {
-        "day": 7,
-        "description": "",
-        "month": 2,
-        "name": "2",
-        "subtasks": [
-            {
-                "day": 7,
-                "description": "",
-                "month": 2,
-                "name": "1",
-                "subtasks": [],
-                "year": 2025
-            },
-            {
-                "day": 7,
-                "description": "",
-                "month": 2,
-                "name": "3",
-                "subtasks": [],
-                "year": 2025
-            }
-        ],
-        "year": 2025
-    },
-    {
-        "day": 7,
-        "description": "",
-        "month": 2,
-        "name": "1",
-        "subtasks": [
-            {
-                "day": 7,
-                "description": "",
-                "month": 2,
-                "name": "2",
-                "subtasks": [],
-                "year": 2025
-            },
-            {
-                "day": 7,
-                "description": "",
-                "month": 2,
-                "name": "3",
-                "subtasks": [],
-                "year": 2025
-            },
-            {
-                "day": 7,
-                "description": "",
-                "month": 2,
-                "name": "4",
-                "subtasks": [],
-                "year": 2025
-            },
-            {
-                "day": 7,
-                "description": "",
-                "month": 2,
-                "name": "5",
-                "subtasks": [],
-                "year": 2025
-            }
-        ],
-        "year": 2025
-    }
-]
+{
+    "archivetasks": [],
+    "tasks": [
+        {
+            "day": 27,
+            "description": "",
+            "month": 2,
+            "name": "3",
+            "status": false,
+            "subtasks": [],
+            "year": 2025
+        },
+        {
+            "day": 27,
+            "description": "",
+            "month": 2,
+            "name": "2",
+            "status": false,
+            "subtasks": [],
+            "year": 2025
+        },
+        {
+            "day": 27,
+            "description": "",
+            "month": 2,
+            "name": "1",
+            "status": false,
+            "subtasks": [],
+            "year": 2025
+        }
+    ]
+}

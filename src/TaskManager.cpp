@@ -11,47 +11,74 @@ using json = nlohmann::json;
 
 void TaskManager::addTask(const Task& task)
 {
-    tasks.insert(tasks.begin(), task);
+    if (task.isCompleted())
+    {
+        ArchiveTasks.insert(tasks.begin(), task);
+    }
+    else
+    {
+        tasks.insert(tasks.begin(), task);
+    }
 }
 void TaskManager::removeTask(const Task& task)
 {
-    auto it = std::remove(tasks.begin(), tasks.end(), task);
-    if (it != tasks.end())
+    auto removeFromList = [](std::vector<Task>& list, const Task& task)
     {
-        tasks.erase(it, tasks.end());
-    }
-}
-void TaskManager::checkDeadlines()
-{
-    for (auto task : tasks)
-    {
-        if (!task.isDeadLineActive())
+        auto it = std::remove(list.begin(), list.end(), task);
+        if (it != list.end())
         {
-            std::cout << "Дедлайн задачи \"" << task.getName() << "\" истек!" << std::endl;
+            list.erase(it, list.end());
         }
-        else
-        {
-            std::cout << "Дедлайн задачи \"" << task.getName() << "\" еще не истек!" << std::endl;
-        }
-    }
+    };
+    removeFromList(tasks, task);
+    removeFromList(ArchiveTasks, task);
 }
-const std::vector<Task>& TaskManager::getTasks() const
+std::vector<Task>& TaskManager::getActiveTasks()
 {
     return tasks;
 }
 
-const int TaskManager::getCountTasks() const
+std::vector<Task>& TaskManager::getArchiveTasks()
+{
+    return ArchiveTasks;
+}
+
+std::vector<Task> TaskManager::getAllTasks()
+{
+    std::vector<Task> allTasks = tasks;
+    allTasks.insert(allTasks.end(), ArchiveTasks.begin(), ArchiveTasks.end());
+    return allTasks;
+}
+
+const int TaskManager::getCountActiveTasks() const
 {
     return tasks.size();
 }
 
+const int TaskManager::getCountArchiveTasks() const
+{
+    return ArchiveTasks.size();
+}
+
+const int TaskManager::getCountAllTasks() const
+{
+    return ArchiveTasks.size() + tasks.size();
+}
+
 void TaskManager::saveTasks() const
 {
-    json j = json::array();
+    json j;
+    j["tasks"] = json::array();
+    j["archivetasks"] = json::array();
 
     for (const auto task : tasks)
     {
-        j.push_back(serializeTask(task));
+        j["tasks"].push_back(serializeTask(task));
+    }
+
+    for (const auto task : ArchiveTasks)
+    {
+        j["archivetasks"].push_back(serializeTask(task));
     }
 
     std::ofstream file("tasks.json", std::ios::trunc);
@@ -81,9 +108,22 @@ void TaskManager::loadTasks()
     file.close();
     file.clear();
 
-    for (const auto& taskJson : j)
+    tasks.clear();
+    ArchiveTasks.clear();
+    if (j.contains("tasks"))
     {
-        tasks.push_back(deserializeTask(taskJson));
+        for (const auto& taskJson : j["tasks"])
+        {
+            tasks.push_back(deserializeTask(taskJson));
+        }
+    }
+
+    if (j.contains("archivetasks"))
+    {
+        for (const auto& taskJson : j["archivetasks"])
+        {
+            ArchiveTasks.push_back(deserializeTask(taskJson));
+        }
     }
 }
 
@@ -93,13 +133,13 @@ json TaskManager::serializeTask(const Task task) const
     taskJson["name"] = task.getName();
     taskJson["description"] = task.getDescription();
     SaveYearMonthDayJson(task.getDeadline(), taskJson);
+    taskJson["status"] = task.isCompleted();
     taskJson["subtasks"] = json::array();
 
-    for (const auto subtask : task.getSubtasks())
+    for (const auto& subtask : task.getSubtasks())
     {
         taskJson["subtasks"].push_back(serializeTask(subtask));
     }
-
     return taskJson;
 }
 
@@ -115,7 +155,8 @@ Task TaskManager::deserializeTask(const json& taskJson)
         deadline = {std::chrono::year(1970), std::chrono::month(1), std::chrono::day(1)};
     }
 
-    Task task(taskJson["name"], taskJson["description"], deadline);
+    bool status = taskJson.value("status", false);
+    Task task(taskJson["name"], taskJson["description"], deadline, status);
     if (taskJson.contains("subtasks") && taskJson["subtasks"].is_array())
     {
         for (const auto subtasksJson : taskJson["subtasks"])
@@ -156,12 +197,57 @@ void TaskManager::clearTasks()
 
 void TaskManager::updateTask(const Task& updatedTask)
 {
-    for(auto& task : tasks)
+    auto updateInList = [](std::vector<Task>& list, const Task& updatedTask)
     {
-        if(task == updatedTask)
+        for (auto& task : list)
         {
-            task = updatedTask;
-            return;
+            if (task == updatedTask)
+            {
+                task = updatedTask;
+                return;
+            }
         }
+    };
+
+    updateInList(tasks, updatedTask);
+    updateInList(ArchiveTasks, updatedTask);
+}
+
+void TaskManager::archiveTask(Task& task)
+{
+    auto it = std::find(tasks.begin(), tasks.end(), task);
+    if (it != tasks.end())
+    {
+        ArchiveTasks.push_back(*it);
+        tasks.erase(it);
+        task.revCompleted();
+        updateTask(task);
     }
+}
+
+void TaskManager::activatedTask(Task& task)
+{
+    auto it = std::find(ArchiveTasks.begin(), ArchiveTasks.end(), task);
+    if (it != ArchiveTasks.end())
+    {
+        tasks.push_back(*it);
+        ArchiveTasks.erase(it);
+        task.revCompleted();
+        updateTask(task);
+    }
+}
+
+std::vector<Task>& TaskManager::getTasks(bool isArchive)
+{
+    return isArchive ? ArchiveTasks : tasks;
+}
+
+int TaskManager::getCountTasks(bool isArchive)
+{
+    return isArchive ? ArchiveTasks.size() : tasks.size();
+}
+
+void TaskManager::activatedOrArchivatedTask(Task& task, bool isCompleted)
+{
+    isCompleted ? activatedTask(task) : archiveTask(task);
 }

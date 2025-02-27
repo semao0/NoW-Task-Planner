@@ -11,14 +11,21 @@ class TaskManager
 {
 private:
     std::vector<Task> tasks;
+    std::vector<Task> ArchiveTasks;
 
 public:
     void addTask(const Task& task);
     void removeTask(const Task& task);
     void updateTask(const Task& updatedTask);
     void checkDeadlines();
-    const std::vector<Task>& getTasks() const;
-    const int getCountTasks() const;
+    std::vector<Task>& getActiveTasks();
+    std::vector<Task>& getArchiveTasks();
+    std::vector<Task> getAllTasks();
+    const int getCountActiveTasks() const;
+    const int getCountArchiveTasks() const;
+    const int getCountAllTasks() const;
+    std::vector<Task>& getTasks(bool isArchive);
+    int getCountTasks(bool isArchive);
 
     void loadTasks();
     void saveTasks() const;
@@ -29,5 +36,8 @@ public:
     void SaveYearMonthDayJson(const std::chrono::year_month_day& deadline, nlohmann::json& taskJson) const;
     std::chrono::year_month_day LoadYearMonthDayJson(const nlohmann::json& taskJson) const;
 
+    void archiveTask(Task& task);
+    void activatedTask(Task& task);
+    void activatedOrArchivatedTask(Task& task, bool isCompleted);
 };
 #endif

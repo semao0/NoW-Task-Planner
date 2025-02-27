@@ -29,6 +29,10 @@ public:
             element->draw(window);
         }
     }
+    void clear ()
+    {
+        elements.clear();
+    }
 };
 
 #endif

@@ -8,9 +8,13 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
+#include <string>
+#include <iostream>
 
-ScrollableList::ScrollableList(float x, float y, float width, float height, int itemHeight)
-    : scrollOffset(0), itemHeight(itemHeight), position(x, y)
+ScrollableList::ScrollableList(
+    float x, float y, float width, float height, int itemHeight, bool isCheckBox, bool isArchive)
+    : scrollOffset(0), itemHeight(itemHeight), position(x, y), selectedIndex(-1), isCheckBox(isCheckBox),
+      isArchive(isArchive)
 {
     backgraund.setPosition(position);
     backgraund.setSize(sf::Vector2f(width, height));
@@ -36,7 +40,7 @@ void ScrollableList::setTasks(TaskManager& tasks)
 void ScrollableList::setTasks(std::vector<Task> tasks)
 {
     TaskManager subtasks;
-    for(auto task : tasks)
+    for (auto& task : tasks)
     {
         subtasks.addTask(task);
     }
@@ -44,22 +48,62 @@ void ScrollableList::setTasks(std::vector<Task> tasks)
     updateRenderedTasks();
 }
 
-
 void ScrollableList::updateRenderedTasks()
 {
     renderedTasks.clear();
-    for (int i = 0; i < visibleItemCount && (i + scrollOffset) < tasks.getCountTasks(); i++)
-    {
-        std::string name = tasks.getTasks()[i + scrollOffset].getName();
+    checkBoxes.clear();
 
-        if (font.getGlyph(name[0], 20, false).advance * name.size() > backgraund.getSize().x)
+    for (int i = 0; i < visibleItemCount && (i + scrollOffset) < tasks.getCountTasks(isArchive); i++)
+    {
+        std::string name = tasks.getTasks(isArchive)[i + scrollOffset].getName();
+
+        int year = static_cast<int>(tasks.getTasks(isArchive)[i + scrollOffset].getDeadline().year());
+        unsigned month = static_cast<unsigned>(tasks.getTasks(isArchive)[i + scrollOffset].getDeadline().month());
+        unsigned day = static_cast<unsigned>(tasks.getTasks(isArchive)[i + scrollOffset].getDeadline().day());
+        std::ostringstream oss;
+        oss << year << "-" << (month < 10 ? "0" : "") << month << "-" << (day < 10 ? "0" : "") << day;
+        std::string dateString = oss.str();
+
+        if (isCheckBox)
         {
-            name = name.substr(0, backgraund.getSize().x / font.getGlyph('A', 20, false).advance) + "...";
+            int index = i + scrollOffset;
+            auto checkbox = std::make_shared<CheckBox>(position.x + backgraund.getSize().x - 40,
+                                                       position.y + i * itemHeight + (itemHeight / 1.7),
+                                                       30,
+                                                       30,
+                                                       tasks.getTasks(isArchive)[index].isCompleted(),
+                                                       [this, index]()
+                                                       {
+                                                           tasks.activatedOrArchivatedTask(
+                                                               tasks.getTasks(isArchive)[index],
+                                                               tasks.getTasks(isArchive)[index].isCompleted());
+                                                           tasks.saveTasks();
+                                                       });
+            checkBoxes.addElement(checkbox);
+        }
+        if (font.getGlyph(name[0], 20, false).advance * name.size() > backgraund.getSize().x - 200)
+        {
+            name = name.substr(0, (backgraund.getSize().x - 200) / font.getGlyph('A', 20, false).advance) + "...";
         }
 
         sf::Text text(name, font, 20);
         text.setPosition(position.x + 10, position.y + i * itemHeight + 10);
         text.setFillColor(sf::Color::Black);
+
+        sf::Text date(dateString, font, 20);
+        date.setPosition(position.x + 450, position.y + i * itemHeight + 10);
+        if (!tasks.getTasks(isArchive)[i + scrollOffset].isDeadLineActive())
+        {
+            date.setFillColor(sf::Color::Red);
+            text.setFillColor(sf::Color::Red);
+        }
+        else
+        {
+            date.setFillColor(sf::Color::Black);
+            text.setFillColor(sf::Color::Black);
+        }
+
+        renderedTasks.push_back(date);
         renderedTasks.push_back(text);
     }
 }
@@ -73,7 +117,7 @@ void ScrollableList::draw(sf::RenderWindow& window)
         window.draw(text);
     }
 
-    for (size_t i = 0; i < renderedTasks.size() + 1; i++)
+    for (size_t i = 0; i < (renderedTasks.size()) / 2 + 1; i++)
     {
         sf::RectangleShape line;
         line.setSize((sf::Vector2f(backgraund.getSize().x, 2)));
@@ -93,6 +137,7 @@ void ScrollableList::draw(sf::RenderWindow& window)
         }
         window.draw(line);
     }
+    checkBoxes.draw(window);
 }
 
 void ScrollableList::handleEvent(const sf::Event& event)
@@ -103,7 +148,7 @@ void ScrollableList::handleEvent(const sf::Event& event)
         {
             --scrollOffset;
         }
-        else if (event.mouseWheelScroll.delta < 0 && (scrollOffset + visibleItemCount) < tasks.getCountTasks())
+        else if (event.mouseWheelScroll.delta < 0 && (scrollOffset + visibleItemCount) < tasks.getCountTasks(isArchive))
         {
             ++scrollOffset;
         }
@@ -115,13 +160,14 @@ void ScrollableList::handleEvent(const sf::Event& event)
         if (backgraund.getGlobalBounds().contains(mousePos))
         {
             int index = (mousePos.y - position.y) / itemHeight + scrollOffset;
-            if (index >= 0 && index < tasks.getCountTasks() && onClickCallback)
+            if (index >= 0 && index < tasks.getCountTasks(isArchive) && onClickCallback)
             {
                 selectedIndex = index;
                 onClickCallback(index);
             }
         }
     }
+    checkBoxes.handleEvent(event);
 }
 int ScrollableList::getIndex()
 {

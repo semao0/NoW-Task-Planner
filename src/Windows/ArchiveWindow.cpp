@@ -1,4 +1,4 @@
-#include "MainWindow.h"
+#include "ArchiveWindow.h"
 #include "CreateWindow.h"
 #include "ScrollableList.h"
 #include "InfoWindow.h"
@@ -14,36 +14,23 @@
 #include "EditWindow.h"
 #include <memory>
 
-MainWindow::MainWindow()
+ArchiveWindow::ArchiveWindow()
     : window(sf::VideoMode(1000, 700), "NoW", sf::Style::Titlebar | sf::Style::Close), selectedTask(dummyTask)
 {
-    dummyTask.setDeadLine(std::chrono::year_month_day{std::chrono::year(1970), std::chrono::month(1), std::chrono::day(1)});
-    Scroll = std::make_shared<ScrollableList>(20, 20, 600, 600, 100, true, false);
+    dummyTask.setDeadLine(
+        std::chrono::year_month_day{std::chrono::year(1970), std::chrono::month(1), std::chrono::day(1)});
+    Scroll = std::make_shared<ScrollableList>(20, 20, 600, 600, 100, true);
     Scroll->onClickCallback = [this](int index)
     {
-        if (!tasks.getActiveTasks().empty() && index >= 0)
+        if (!ArhiveTasks.getArchiveTasks().empty() && index >= 0)
         {
-            selectedTask = tasks.getActiveTasks()[index];
+            selectedTask = ArhiveTasks.getArchiveTasks()[index];
         }
         else
         {
             selectedTask = dummyTask;
         }
     };
-
-    auto buttonCreate = std::make_shared<Button>(
-        810,
-        15,
-        170,
-        40,
-        "Create new task",
-        [this, &Scroll = Scroll]()
-        {
-            Scroll->onClickCallback(Scroll->getIndex());
-            auto window = std::make_shared<CreateWindow>(tasks, *Scroll);
-            window->run();
-        },
-        20);
     auto buttonEdit = std::make_shared<Button>(
         810,
         70,
@@ -56,7 +43,7 @@ MainWindow::MainWindow()
 
             if (!selectedTask.isEmpty())
             {
-                auto window = std::make_shared<EditWindow>(selectedTask, tasks, *Scroll);
+                auto window = std::make_shared<EditWindow>(selectedTask, ArhiveTasks, *Scroll);
                 window->run();
             }
             else
@@ -71,7 +58,7 @@ MainWindow::MainWindow()
         170,
         40,
         "Info",
-        [this, &Scroll = Scroll, &tasks = tasks]()
+        [this, &Scroll = Scroll, &tasks = ArhiveTasks]()
         {
             Scroll->onClickCallback(Scroll->getIndex());
 
@@ -86,15 +73,14 @@ MainWindow::MainWindow()
             }
         },
         20);
-    MainElemets.addElement(buttonInfo);
-    MainElemets.addElement(buttonEdit);
-    MainElemets.addElement(buttonCreate);
-    MainElemets.addElement(Scroll);
-    tasks.loadTasks();
-    Scroll->setTasks(tasks);
+    ArchiveElemets.addElement(buttonInfo);
+    ArchiveElemets.addElement(buttonEdit);
+    ArchiveElemets.addElement(Scroll);
+    ArhiveTasks.loadTasks();
+    Scroll->setTasks(ArhiveTasks);
 }
 
-void MainWindow::run()
+void ArchiveWindow::run()
 {
     while (window.isOpen())
     {
@@ -102,7 +88,7 @@ void MainWindow::run()
         render();
     }
 }
-void MainWindow::handleEvents()
+void ArchiveWindow::handleEvents()
 {
     sf::Event event;
     while (window.pollEvent(event))
@@ -111,12 +97,12 @@ void MainWindow::handleEvents()
         {
             window.close();
         }
-        MainElemets.handleEvent(event);
+        ArchiveElemets.handleEvent(event);
     }
 }
-void MainWindow::render()
+void ArchiveWindow::render()
 {
     window.clear(sf::Color::White);
-    MainElemets.draw(window);
+    ArchiveElemets.draw(window);
     window.display();
 }

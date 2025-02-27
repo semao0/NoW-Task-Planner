@@ -33,10 +33,15 @@ public:
             throw std::runtime_error("Не удалось загрузить шрифт resources/Arial.ttf");
         }
         label.setFont(font);
+        float textWidth = 0;
+        for (char c : text)
+        {
+            textWidth += font.getGlyph(c, charsize, false).advance;
+        }
         label.setString(text);
         label.setCharacterSize(charsize);
         label.setFillColor(sf::Color::Black);
-        label.setPosition(x + 10, y + 5);
+        label.setPosition(x + (width - textWidth) / 2, y + 5);
     }
     void draw(sf::RenderWindow& window) override
     {
@@ -53,13 +58,6 @@ public:
                 onClick();
             }
         }
-    }
-    void handleResizeWithView(sf::RenderWindow& window, const sf::Event& event)
-    {
-        sf::View view = window.getView();
-        view.setSize(event.size.width, event.size.height);
-        view.setCenter(event.size.width / 2.0f, event.size.height / 2.0f);
-        window.setView(view);
     }
 };
 #endif

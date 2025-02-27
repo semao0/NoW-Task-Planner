@@ -16,7 +16,7 @@ private:
     bool IsFrame;
 
 public:
-    Label(float x, float y, float width, float height, std::string Text, bool IsFrame) : IsFrame(IsFrame)
+    Label(float x, float y, float width, float height, std::string Text, bool IsFrame = false) : IsFrame(IsFrame)
     {
         if (!font.loadFromFile("resources/Arial.ttf"))
         {

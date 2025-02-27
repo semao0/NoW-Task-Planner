@@ -39,7 +39,7 @@ EditWindow::EditWindow(Task& task, TaskManager& tasks, ScrollableList& Scroll)
         630,
         170,
         40,
-        "           Save",
+        "Save",
         [&task, nameinput, descinput, calendarewidget, this, &tasks, &Scroll]()
         {
             Task newtask(nameinput->getText(), descinput->getText(), calendarewidget->getSelectedDate());

@@ -13,9 +13,17 @@
 #include <iostream>
 #include <memory>
 
-CreateWindow::CreateWindow(TaskManager& tasks, ScrollableList& Scroll, bool isMain, Task* MainTask)
+CreateWindow::CreateWindow(TaskManager& tasks, ScrollableList& Scroll, Task* MainTask)
     : window(sf::VideoMode(1000, 700), "NoW - Create task", sf::Style::Titlebar | sf::Style::Close)
 {
+    if(MainTask == nullptr)
+    {
+        isMain = true;
+    }
+    else
+    {
+        isMain = false;
+    }
     auto nameinput = std::make_shared<TextInput>(400, 100, 450, 35);
     CreateElemets.addElement(nameinput);
     auto namelabel = std::make_shared<Label>(100, 100, 100, 40, "Name:", false);
@@ -36,8 +44,8 @@ CreateWindow::CreateWindow(TaskManager& tasks, ScrollableList& Scroll, bool isMa
         630,
         170,
         40,
-        "        Create",
-        [nameinput, descinput, calendarewidget, &tasks, &window = window, &Scroll = Scroll, isMain, MainTask]()
+        "Create",
+        [nameinput, descinput, calendarewidget, &tasks, &window = window, &Scroll = Scroll, this, MainTask]()
         {
             Task newtask{nameinput->getText(), descinput->getText(), calendarewidget->getSelectedDate()};
             if (isMain)

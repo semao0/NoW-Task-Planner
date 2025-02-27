@@ -9,6 +9,8 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Window.hpp>
 #include <vector>
+#include "CheckBox.h"
+#include "guiManager.h"
 class ScrollableList : public guiElement
 {
 private:
@@ -21,13 +23,16 @@ private:
     int itemHeight;
     sf::Vector2f position;
     int selectedIndex;
+    bool isCheckBox;
+    bool isArchive;
+    guiManager checkBoxes;
 
     void updateRenderedTasks();
 
 public:
     std::function<void(int)> onClickCallback;
 
-    ScrollableList(float x, float y, float width, float height, int itemHeight);
+    ScrollableList(float x, float y, float width, float height, int itemHeight, bool isCheckBox = false, bool isArchive = false);
     void setTasks(TaskManager& tasks);
     void setTasks(std::vector<Task>);
 

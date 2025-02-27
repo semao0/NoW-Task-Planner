@@ -1,12 +1,9 @@
 #include "Task.h"
 #include <bits/chrono.h>
 #include <chrono>
-#include <cstddef>
-#include <iterator>
 
-Task::Task(const std::string& name, const std::string& description, std::chrono::year_month_day deadline)
-    : name(name), description(description), isCompleted(false),
-      deadline(deadline.year(), deadline.month(), deadline.day())
+Task::Task(const std::string& name, const std::string& description, std::chrono::year_month_day deadline, bool status)
+    : name(name), description(description), status(status), deadline(deadline.year(), deadline.month(), deadline.day())
 {
 }
 
@@ -36,9 +33,9 @@ void Task::addSubtasks(const Task& subtask)
     subtasks.push_back(subtask);
 }
 
-void Task::markCompleted()
+void Task::revCompleted()
 {
-    isCompleted = true;
+    status = !status;
 }
 
 std::string Task::getName() const
@@ -77,6 +74,7 @@ Task& Task::operator=(const Task& other)
     this->name = other.name;
     this->description = other.description;
     this->deadline = other.deadline;
+    this->status = other.status;
 
     this->subtasks.clear();
     for (auto task : other.subtasks)
@@ -89,5 +87,10 @@ Task& Task::operator=(const Task& other)
 
 bool Task::isEmpty() const
 {
-    return name.empty() && description.empty();
+    return name.empty() && description.empty() &&
+           deadline == std::chrono::year_month_day{std::chrono::year(1970), std::chrono::month(1), std::chrono::day(1)};
+}
+bool Task::isCompleted() const
+{
+    return status;
 }

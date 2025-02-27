@@ -14,7 +14,7 @@ private:
     sf::RenderWindow window;
 
 public:
-    InfoWindow(Task& task, ScrollableList& Scroll, TaskManager& tasks, bool IsSubTask);
+    InfoWindow(Task& task, ScrollableList& Scroll, TaskManager& tasks, bool IsSubTask = false, bool isArchive = false);
     void run();
 
 private:

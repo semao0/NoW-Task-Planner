@@ -1,25 +1,28 @@
-#ifndef CREATEWINDOW_H
-#define CREATEWINDOW_H
+#ifndef ARCHIVEWINDOW_H
+#define ARCHIVEWINDOW_H
+#include "ScrollableList.h"
 #include "guiManager.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include "TaskManager.h"
-#include "ScrollableList.h"
 
-class CreateWindow
+class ArchiveWindow
 {
 private:
-    guiManager CreateElemets;
+    guiManager ArchiveElemets;
     sf::RenderWindow window;
+    TaskManager ArhiveTasks;
+    std::shared_ptr<ScrollableList> Scroll;
+    Task& selectedTask;
 
 public:
-    CreateWindow(TaskManager& tasks, ScrollableList& Scroll, Task* MainTask = nullptr);
+ArchiveWindow();
     void run();
 
 private:
     void render();
     void handleEvents();
-    bool isMain;
+    Task dummyTask;
 };
 #endif
