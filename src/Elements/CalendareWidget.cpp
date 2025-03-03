@@ -1,6 +1,5 @@
 #include "CalendareWidget.h"
 #include "Button.h"
-#include "guiElement.h"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -12,7 +11,6 @@
 #include <SFML/Window/Window.hpp>
 #include <bits/chrono.h>
 #include <chrono>
-#include <cstddef>
 #include <ctime>
 #include <memory>
 #include <string>
@@ -109,7 +107,6 @@ void CalendareWidget::handleEvent(const sf::Event& event)
                 selectedDay = days[i];
                 currentDate = std::chrono::year_month_day{
                     currentDate.year(), currentDate.month(), std::chrono::day{unsigned(days[i])}};
-                // currentDate.day() = std::chrono::day{unsigned(days[i])};
                 std::cout << days[i] << "-" << static_cast<unsigned>(currentDate.month()) << "-"
                           << static_cast<int>(currentDate.year()) << std::endl;
             }

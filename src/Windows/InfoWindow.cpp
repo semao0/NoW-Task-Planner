@@ -18,29 +18,34 @@
 #include <string>
 InfoWindow::InfoWindow(Task& task, ScrollableList& Scroll, TaskManager& tasks, bool IsSubTask, bool isArchive)
     : window(sf::VideoMode(1000, 700), "NoW - Task Information", sf::Style::Titlebar | sf::Style::Close),
-      selectedTask(task), selectedSubTask(dummyTask)
+      dummyTask("Dummy",
+                "No description",
+                std::chrono::year_month_day{std::chrono::year(1970), std::chrono::month(1), std::chrono::day(1)},
+                -1,
+                false),
+      selectedTask(&task), selectedSubTask(&dummyTask)
 {
     for (auto sub : task.getSubtasks())
     {
         subtasks.addTask(sub);
     }
-    auto checkbox = std::make_shared<CheckBox>(900, 350, 40, 40, false, [](){std:: cout << "s" << std::endl;} );
+    auto checkbox = std::make_shared<CheckBox>(900, 350, 40, 40, false, []() { std::cout << "s" << std::endl; });
     InfoElemets.addElement(checkbox);
 
-    auto namelabeltask = std::make_shared<Label>(400, 100, 100, 40, selectedTask.getName());
+    auto namelabeltask = std::make_shared<Label>(400, 100, 100, 40, selectedTask->getName());
     InfoElemets.addElement(namelabeltask);
     auto namelabel = std::make_shared<Label>(100, 100, 100, 40, "Name:");
     InfoElemets.addElement(namelabel);
 
-    auto desclabeltask = std::make_shared<Label>(400, 200, 100, 40, selectedTask.getDescription());
+    auto desclabeltask = std::make_shared<Label>(400, 200, 100, 40, selectedTask->getDescription());
     InfoElemets.addElement(desclabeltask);
     auto desclabel = std::make_shared<Label>(100, 200, 100, 40, "Description:");
     InfoElemets.addElement(desclabel);
 
     std::ostringstream deadline;
-    deadline << std::setw(2) << std::setfill('0') << static_cast<unsigned>(selectedTask.getDeadline().day()) << '-'
-             << std::setw(2) << std::setfill('0') << static_cast<unsigned>(selectedTask.getDeadline().month()) << '-'
-             << static_cast<int>(selectedTask.getDeadline().year());
+    deadline << std::setw(2) << std::setfill('0') << static_cast<unsigned>(selectedTask->getDeadline().day()) << '-'
+             << std::setw(2) << std::setfill('0') << static_cast<unsigned>(selectedTask->getDeadline().month()) << '-'
+             << static_cast<int>(selectedTask->getDeadline().year());
     std::string deadlinestr = deadline.str();
 
     auto deadlinelabeltask = std::make_shared<Label>(400, 300, 100, 40, deadlinestr, false);
@@ -48,8 +53,7 @@ InfoWindow::InfoWindow(Task& task, ScrollableList& Scroll, TaskManager& tasks, b
     auto deadlinelabel = std::make_shared<Label>(100, 300, 100, 40, "Deadline:");
     InfoElemets.addElement(deadlinelabel);
 
-    auto buttonSave =
-        std::make_shared<Button>(810, 630, 170, 40, "Back", [&window = window]() { window.close(); }, 20);
+    auto buttonSave = std::make_shared<Button>(810, 630, 170, 40, "Back", [&window = window]() { window.close(); }, 20);
     InfoElemets.addElement(buttonSave);
 
     if (!IsSubTask)
@@ -64,9 +68,9 @@ InfoWindow::InfoWindow(Task& task, ScrollableList& Scroll, TaskManager& tasks, b
             {
                 ScrollInfo->onClickCallback(ScrollInfo->getIndex());
 
-                if (!selectedSubTask.isEmpty())
+                if (!selectedSubTask->isEmpty())
                 {
-                    auto window = std::make_shared<InfoWindow>(selectedSubTask, *ScrollInfo, tasks, true);
+                    auto window = std::make_shared<InfoWindow>(*selectedSubTask, *ScrollInfo, tasks, true);
                     window->run();
                 }
                 else
@@ -82,11 +86,11 @@ InfoWindow::InfoWindow(Task& task, ScrollableList& Scroll, TaskManager& tasks, b
         {
             if (!subtasks.getAllTasks().empty())
             {
-                selectedSubTask = subtasks.getAllTasks()[index];
+                selectedSubTask = &subtasks.getAllTasks()[index];
             }
             else
             {
-                selectedSubTask = dummyTask;
+                selectedSubTask = &dummyTask;
             }
         };
         ScrollInfo->setTasks(task.getSubtasks());

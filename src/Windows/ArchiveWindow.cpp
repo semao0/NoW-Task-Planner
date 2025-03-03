@@ -1,11 +1,9 @@
 #include "ArchiveWindow.h"
-#include "CreateWindow.h"
 #include "ScrollableList.h"
 #include "InfoWindow.h"
 #include "TaskManager.h"
 #include "guiManager.h"
 #include "Button.h"
-#include "TextInput.h"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
@@ -14,22 +12,31 @@
 #include "EditWindow.h"
 #include <memory>
 
-ArchiveWindow::ArchiveWindow()
-    : window(sf::VideoMode(1000, 700), "NoW", sf::Style::Titlebar | sf::Style::Close), selectedTask(dummyTask)
+ArchiveWindow::ArchiveWindow(TaskManager& tasks, ScrollableList& MainScroll)
+    : window(sf::VideoMode(1000, 700), "NoW", sf::Style::Titlebar | sf::Style::Close), tasks(tasks),
+      dummyTask("Dummy",
+                "No description",
+                std::chrono::year_month_day{std::chrono::year(1970), std::chrono::month(1), std::chrono::day(1)},
+                -1,
+                false),
+      selectedTaskArc(&dummyTask)
 {
-    dummyTask.setDeadLine(
-        std::chrono::year_month_day{std::chrono::year(1970), std::chrono::month(1), std::chrono::day(1)});
-    Scroll = std::make_shared<ScrollableList>(20, 20, 600, 600, 100, true);
-    Scroll->onClickCallback = [this](int index)
+    ScrollArchive = std::make_shared<ScrollableList>(20, 20, 600, 600, 100, true, true);
+    ScrollArchive->onClickCallback = [this, &tasks](int index)
     {
-        if (!ArhiveTasks.getArchiveTasks().empty() && index >= 0)
+        if (!tasks.getArchiveTasks().empty() && index >= 0)
         {
-            selectedTask = ArhiveTasks.getArchiveTasks()[index];
+            selectedTaskArc = &tasks.getArchiveTasks()[index];
         }
         else
         {
-            selectedTask = dummyTask;
+            selectedTaskArc = &dummyTask;
         }
+    };
+    ScrollArchive->onCheckBoxToggle = [this, &tasks, &MainScroll](Task& t)
+    {
+        tasks.activatedOrArchivatedTask(t, t.isCompleted());
+        tasks.saveTasks();
     };
     auto buttonEdit = std::make_shared<Button>(
         810,
@@ -37,13 +44,13 @@ ArchiveWindow::ArchiveWindow()
         170,
         40,
         "Edit task",
-        [this]()
+        [this, &tasks]()
         {
-            Scroll->onClickCallback(Scroll->getIndex());
+            ScrollArchive->onClickCallback(ScrollArchive->getIndex());
 
-            if (!selectedTask.isEmpty())
+            if (!selectedTaskArc->isEmpty())
             {
-                auto window = std::make_shared<EditWindow>(selectedTask, ArhiveTasks, *Scroll);
+                auto window = std::make_shared<EditWindow>(*selectedTaskArc, tasks, *ScrollArchive);
                 window->run();
             }
             else
@@ -58,13 +65,13 @@ ArchiveWindow::ArchiveWindow()
         170,
         40,
         "Info",
-        [this, &Scroll = Scroll, &tasks = ArhiveTasks]()
+        [this, &tasks]()
         {
-            Scroll->onClickCallback(Scroll->getIndex());
+            ScrollArchive->onClickCallback(ScrollArchive->getIndex());
 
-            if (!selectedTask.isEmpty())
+            if (!selectedTaskArc->isEmpty())
             {
-                auto window = std::make_shared<InfoWindow>(selectedTask, *Scroll, tasks);
+                auto window = std::make_shared<InfoWindow>(*selectedTaskArc, *ScrollArchive, tasks, false, true);
                 window->run();
             }
             else
@@ -75,9 +82,9 @@ ArchiveWindow::ArchiveWindow()
         20);
     ArchiveElemets.addElement(buttonInfo);
     ArchiveElemets.addElement(buttonEdit);
-    ArchiveElemets.addElement(Scroll);
-    ArhiveTasks.loadTasks();
-    Scroll->setTasks(ArhiveTasks);
+    ArchiveElemets.addElement(ScrollArchive);
+    tasks.loadTasks();
+    ScrollArchive->setTasks(tasks);
 }
 
 void ArchiveWindow::run()

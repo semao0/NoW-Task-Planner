@@ -10,13 +10,13 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/VideoMode.hpp>
-#include <iostream>
 #include <memory>
+#include <iostream>
 
 CreateWindow::CreateWindow(TaskManager& tasks, ScrollableList& Scroll, Task* MainTask)
     : window(sf::VideoMode(1000, 700), "NoW - Create task", sf::Style::Titlebar | sf::Style::Close)
 {
-    if(MainTask == nullptr)
+    if (MainTask == nullptr)
     {
         isMain = true;
     }
@@ -47,7 +47,15 @@ CreateWindow::CreateWindow(TaskManager& tasks, ScrollableList& Scroll, Task* Mai
         "Create",
         [nameinput, descinput, calendarewidget, &tasks, &window = window, &Scroll = Scroll, this, MainTask]()
         {
-            Task newtask{nameinput->getText(), descinput->getText(), calendarewidget->getSelectedDate()};
+            std::cout << "Before create: \n";
+            for (const auto& t : tasks.getAllTasks())
+            {
+                std::cout << "Task: " << t.getName() << ", comp: " << t.isCompleted() << "\n";
+            }
+            Task newtask{nameinput->getText(),
+                         descinput->getText(),
+                         calendarewidget->getSelectedDate(),
+                         Task::generateUniqueId()};
             if (isMain)
             {
                 tasks.addTask(newtask);
@@ -61,6 +69,12 @@ CreateWindow::CreateWindow(TaskManager& tasks, ScrollableList& Scroll, Task* Mai
             }
             window.close();
             tasks.saveTasks();
+            tasks.loadTasks();
+            std::cout << "After create: \n";
+            for (const auto& t : tasks.getAllTasks())
+            {
+                std::cout << "Task: " << t.getName() << ", comp: " << t.isCompleted() << "\n";
+            }
         },
         20);
     CreateElemets.addElement(button);

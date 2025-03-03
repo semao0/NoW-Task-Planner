@@ -20,8 +20,8 @@ public:
 private:
     void render();
     void handleEvents();
-    Task& selectedTask;
-    Task& selectedSubTask;
+    Task* selectedTask;
+    Task* selectedSubTask;
     std::shared_ptr<ScrollableList> ScrollInfo;
     Task dummyTask;
     TaskManager subtasks;

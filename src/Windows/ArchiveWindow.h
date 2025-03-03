@@ -12,12 +12,12 @@ class ArchiveWindow
 private:
     guiManager ArchiveElemets;
     sf::RenderWindow window;
-    TaskManager ArhiveTasks;
-    std::shared_ptr<ScrollableList> Scroll;
-    Task& selectedTask;
+    TaskManager& tasks;
+    std::shared_ptr<ScrollableList> ScrollArchive;
+    Task* selectedTaskArc;
 
 public:
-ArchiveWindow();
+    ArchiveWindow(TaskManager& tasks, ScrollableList& Scroll);
     void run();
 
 private:

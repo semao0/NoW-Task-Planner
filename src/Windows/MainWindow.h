@@ -14,7 +14,7 @@ private:
     sf::RenderWindow window;
     TaskManager tasks;
     std::shared_ptr<ScrollableList> Scroll;
-    Task& selectedTask;
+    Task* selectedTask;
 
 public:
     MainWindow();

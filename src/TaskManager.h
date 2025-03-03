@@ -31,10 +31,14 @@ public:
     void saveTasks() const;
     void clearTasks();
 
-    nlohmann::json serializeTask(const Task task) const;
+    nlohmann::json serializeTask(const Task& task) const;
     Task deserializeTask(const nlohmann::json& taskJson);
+
     void SaveYearMonthDayJson(const std::chrono::year_month_day& deadline, nlohmann::json& taskJson) const;
     std::chrono::year_month_day LoadYearMonthDayJson(const nlohmann::json& taskJson) const;
+
+    nlohmann::json saveCurrentId() const;
+    int loadCurrentId(const nlohmann::json& CurrentIdJson) const;
 
     void archiveTask(Task& task);
     void activatedTask(Task& task);

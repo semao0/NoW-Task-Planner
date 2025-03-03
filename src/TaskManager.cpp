@@ -13,7 +13,7 @@ void TaskManager::addTask(const Task& task)
 {
     if (task.isCompleted())
     {
-        ArchiveTasks.insert(tasks.begin(), task);
+        ArchiveTasks.insert(ArchiveTasks.begin(), task);
     }
     else
     {
@@ -70,6 +70,7 @@ void TaskManager::saveTasks() const
     json j;
     j["tasks"] = json::array();
     j["archivetasks"] = json::array();
+    j["currentid"] = saveCurrentId();
 
     for (const auto task : tasks)
     {
@@ -80,7 +81,6 @@ void TaskManager::saveTasks() const
     {
         j["archivetasks"].push_back(serializeTask(task));
     }
-
     std::ofstream file("tasks.json", std::ios::trunc);
     if (!file.is_open())
     {
@@ -96,7 +96,7 @@ void TaskManager::loadTasks()
 
     if (!file.is_open())
     {
-        throw std::runtime_error("Не удалость открыть файл tasks.json для чтения!");
+        throw std::runtime_error("Не удалось открыть файл tasks.json для чтения!");
     }
     if (file.peek() == std::ifstream::traits_type::eof())
     {
@@ -125,15 +125,21 @@ void TaskManager::loadTasks()
             ArchiveTasks.push_back(deserializeTask(taskJson));
         }
     }
+
+    if (j.contains("currentid") && j["currentid"].is_number_integer())
+    {
+        Task::setCurrentId(j["currentid"]);
+    }
 }
 
-json TaskManager::serializeTask(const Task task) const
+json TaskManager::serializeTask(const Task& task) const
 {
     json taskJson;
     taskJson["name"] = task.getName();
     taskJson["description"] = task.getDescription();
-    SaveYearMonthDayJson(task.getDeadline(), taskJson);
     taskJson["status"] = task.isCompleted();
+    taskJson["id"] = task.getId();
+    SaveYearMonthDayJson(task.getDeadline(), taskJson);
     taskJson["subtasks"] = json::array();
 
     for (const auto& subtask : task.getSubtasks())
@@ -141,6 +147,20 @@ json TaskManager::serializeTask(const Task task) const
         taskJson["subtasks"].push_back(serializeTask(subtask));
     }
     return taskJson;
+}
+
+json TaskManager::saveCurrentId() const
+{
+    return Task::getCurrentId();
+}
+
+int TaskManager::loadCurrentId(const json& data) const
+{
+    if (data.is_number_integer())
+    {
+        return data.get<int>();
+    }
+    return 0;
 }
 
 Task TaskManager::deserializeTask(const json& taskJson)
@@ -156,9 +176,11 @@ Task TaskManager::deserializeTask(const json& taskJson)
     }
 
     bool status = taskJson.value("status", false);
-    Task task(taskJson["name"], taskJson["description"], deadline, status);
+    int id = taskJson.value("id", -1);
+    Task task(taskJson["name"], taskJson["description"], deadline, id, status);
     if (taskJson.contains("subtasks") && taskJson["subtasks"].is_array())
     {
+        task.getSubtasks().reserve(taskJson["subtasks"].size());
         for (const auto subtasksJson : taskJson["subtasks"])
         {
             task.addSubtasks(deserializeTask(subtasksJson));
@@ -220,8 +242,8 @@ void TaskManager::archiveTask(Task& task)
     {
         ArchiveTasks.push_back(*it);
         tasks.erase(it);
-        task.revCompleted();
-        updateTask(task);
+        it->revCompleted();
+        updateTask(*it);
     }
 }
 
@@ -232,8 +254,8 @@ void TaskManager::activatedTask(Task& task)
     {
         tasks.push_back(*it);
         ArchiveTasks.erase(it);
-        task.revCompleted();
-        updateTask(task);
+        it->revCompleted();
+        updateTask(*it);
     }
 }
 
@@ -249,5 +271,16 @@ int TaskManager::getCountTasks(bool isArchive)
 
 void TaskManager::activatedOrArchivatedTask(Task& task, bool isCompleted)
 {
-    isCompleted ? activatedTask(task) : archiveTask(task);
+    auto& listFrom = isCompleted ? ArchiveTasks : tasks;
+    auto& listTo = isCompleted ? tasks : ArchiveTasks;
+
+    auto it = std::find_if(listFrom.begin(), listFrom.end(),
+                           [&task](const Task& t) { return t == task; });
+
+    if (it != listFrom.end())
+    {
+        it->revCompleted();
+        listTo.push_back(std::move(*it));
+        listFrom.erase(it);
+    }
 }

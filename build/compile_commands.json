@@ -19,6 +19,12 @@
 },
 {
   "directory": "/home/semao0/TaskPlanner/build",
+  "command": "/usr/bin/clang++ -I/home/semao0/TaskPlanner/src/Elements -I/home/semao0/TaskPlanner/src -I/home/semao0/TaskPlanner/src/Windows -g -std=gnu++20 -o CMakeFiles/TaskPlanner.dir/src/Windows/ArchiveWindow.cpp.o -c /home/semao0/TaskPlanner/src/Windows/ArchiveWindow.cpp",
+  "file": "/home/semao0/TaskPlanner/src/Windows/ArchiveWindow.cpp",
+  "output": "CMakeFiles/TaskPlanner.dir/src/Windows/ArchiveWindow.cpp.o"
+},
+{
+  "directory": "/home/semao0/TaskPlanner/build",
   "command": "/usr/bin/clang++ -I/home/semao0/TaskPlanner/src/Elements -I/home/semao0/TaskPlanner/src -I/home/semao0/TaskPlanner/src/Windows -g -std=gnu++20 -o CMakeFiles/TaskPlanner.dir/src/Windows/CreateWindow.cpp.o -c /home/semao0/TaskPlanner/src/Windows/CreateWindow.cpp",
   "file": "/home/semao0/TaskPlanner/src/Windows/CreateWindow.cpp",
   "output": "CMakeFiles/TaskPlanner.dir/src/Windows/CreateWindow.cpp.o"

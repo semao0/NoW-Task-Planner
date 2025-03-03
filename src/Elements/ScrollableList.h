@@ -26,11 +26,13 @@ private:
     bool isCheckBox;
     bool isArchive;
     guiManager checkBoxes;
+    bool needupdate;
 
     void updateRenderedTasks();
 
 public:
     std::function<void(int)> onClickCallback;
+    std::function<void(Task&)> onCheckBoxToggle;
 
     ScrollableList(float x, float y, float width, float height, int itemHeight, bool isCheckBox = false, bool isArchive = false);
     void setTasks(TaskManager& tasks);

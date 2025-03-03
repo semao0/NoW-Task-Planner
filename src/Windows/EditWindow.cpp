@@ -10,8 +10,6 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/VideoMode.hpp>
-#include <chrono>
-#include <iostream>
 #include <memory>
 EditWindow::EditWindow(Task& task, TaskManager& tasks, ScrollableList& Scroll)
     : window(sf::VideoMode(1000, 700), "NoW - Edit task", sf::Style::Titlebar | sf::Style::Close), selectedTask(task)
@@ -42,7 +40,7 @@ EditWindow::EditWindow(Task& task, TaskManager& tasks, ScrollableList& Scroll)
         "Save",
         [&task, nameinput, descinput, calendarewidget, this, &tasks, &Scroll]()
         {
-            Task newtask(nameinput->getText(), descinput->getText(), calendarewidget->getSelectedDate());
+            Task newtask(nameinput->getText(), descinput->getText(), calendarewidget->getSelectedDate(), task.getId());
             tasks.removeTask(task);
             tasks.addTask(newtask);
             tasks.clearTasks();

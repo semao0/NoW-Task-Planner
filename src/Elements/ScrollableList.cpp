@@ -11,10 +11,15 @@
 #include <string>
 #include <iostream>
 
-ScrollableList::ScrollableList(
-    float x, float y, float width, float height, int itemHeight, bool isCheckBox, bool isArchive)
+ScrollableList::ScrollableList(float x,
+                               float y,
+                               float width,
+                               float height,
+                               int itemHeight,
+                               bool isCheckBox,
+                               bool isArchive)
     : scrollOffset(0), itemHeight(itemHeight), position(x, y), selectedIndex(-1), isCheckBox(isCheckBox),
-      isArchive(isArchive)
+      isArchive(isArchive), needupdate(false)
 {
     backgraund.setPosition(position);
     backgraund.setSize(sf::Vector2f(width, height));
@@ -55,29 +60,53 @@ void ScrollableList::updateRenderedTasks()
 
     for (int i = 0; i < visibleItemCount && (i + scrollOffset) < tasks.getCountTasks(isArchive); i++)
     {
-        std::string name = tasks.getTasks(isArchive)[i + scrollOffset].getName();
+        int index = i + scrollOffset;
 
-        int year = static_cast<int>(tasks.getTasks(isArchive)[i + scrollOffset].getDeadline().year());
-        unsigned month = static_cast<unsigned>(tasks.getTasks(isArchive)[i + scrollOffset].getDeadline().month());
-        unsigned day = static_cast<unsigned>(tasks.getTasks(isArchive)[i + scrollOffset].getDeadline().day());
+        const auto& task = tasks.getTasks(isArchive)[index];
+        std::string name = task.getName();
+
+        int year = static_cast<int>(task.getDeadline().year());
+        unsigned month = static_cast<unsigned>(task.getDeadline().month());
+        unsigned day = static_cast<unsigned>(task.getDeadline().day());
         std::ostringstream oss;
         oss << year << "-" << (month < 10 ? "0" : "") << month << "-" << (day < 10 ? "0" : "") << day;
         std::string dateString = oss.str();
 
         if (isCheckBox)
         {
-            int index = i + scrollOffset;
             auto checkbox = std::make_shared<CheckBox>(position.x + backgraund.getSize().x - 40,
                                                        position.y + i * itemHeight + (itemHeight / 1.7),
                                                        30,
                                                        30,
                                                        tasks.getTasks(isArchive)[index].isCompleted(),
-                                                       [this, index]()
+                                                       [this, &task]()
                                                        {
-                                                           tasks.activatedOrArchivatedTask(
-                                                               tasks.getTasks(isArchive)[index],
-                                                               tasks.getTasks(isArchive)[index].isCompleted());
-                                                           tasks.saveTasks();
+                                                           for (auto& t : tasks.getTasks(isArchive))
+                                                           {
+
+                                                               if (t == task)
+                                                               {
+                                                                   //    std::cout << "Before moving: \n";
+                                                                   //    for (const auto& t : tasks.getTasks(isArchive))
+                                                                   //    {
+                                                                   //        std::cout << "Task: " << t.getName()
+                                                                   //                  << ", ID: " << t.getId() << "\n";
+                                                                   //    }
+                                                                   if (onCheckBoxToggle)
+                                                                   {
+                                                                       onCheckBoxToggle(t);
+                                                                   }
+                                                                   needupdate = true;
+                                                                   tasks.loadTasks();
+                                                                   //    std::cout << "After moving: \n";
+                                                                   //    for (const auto& t : tasks.getTasks(isArchive))
+                                                                   //    {
+                                                                   //        std::cout << "Task: " << t.getName()
+                                                                   //                  << ", ID: " << t.getId() << "\n";
+                                                                   //    }
+                                                                   break;
+                                                               }
+                                                           }
                                                        });
             checkBoxes.addElement(checkbox);
         }
@@ -110,7 +139,6 @@ void ScrollableList::updateRenderedTasks()
 
 void ScrollableList::draw(sf::RenderWindow& window)
 {
-
     window.draw(backgraund);
     for (const auto& text : renderedTasks)
     {
@@ -168,6 +196,10 @@ void ScrollableList::handleEvent(const sf::Event& event)
         }
     }
     checkBoxes.handleEvent(event);
+    if (needupdate)
+    {
+        updateRenderedTasks();
+    }
 }
 int ScrollableList::getIndex()
 {
