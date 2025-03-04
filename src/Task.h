@@ -23,11 +23,7 @@ public:
          std::chrono::year_month_day a,
          int id,
          bool status = false);
-    //Task();
-    //Task(const std::string& name,
-         //const std::string& description,
-        // std::chrono::year_month_day deadline,
-        // bool status = false);
+
 
     void setDeadLine(const std::chrono::year_month_day);
     std::chrono::days getTimeLeft() const;
@@ -35,6 +31,7 @@ public:
     int getId() const;
 
     void addSubtasks(const Task& subtask);
+    void addSubtasks(const std::vector<Task>& subtask);
     void revCompleted();
     std::string getName() const;
     std::string getDescription() const;

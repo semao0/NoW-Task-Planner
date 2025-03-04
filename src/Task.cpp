@@ -8,13 +8,6 @@ Task::Task(
       id(id)
 {
 }
-//Task::Task(const std::string& name, const std::string& description, std::chrono::year_month_day deadline, bool status)
-    //: name(name), description(description), status(status), deadline(deadline.year(), deadline.month(), deadline.day()),
-     // id(generateUniqueId())
-//{
-//}
-
-//Task::Task() :id(generateUniqueId()){} 
 void Task::setDeadLine(const std::chrono::year_month_day newDeadLine)
 {
     deadline = newDeadLine;
@@ -37,6 +30,14 @@ bool Task::isDeadLineActive() const
 void Task::addSubtasks(const Task& subtask)
 {
     subtasks.push_back(subtask);
+}
+
+void Task::addSubtasks(const std::vector<Task>& subtasks)
+{
+    for(const auto& subtask : subtasks)
+    {
+        this->subtasks.push_back(subtask);
+    }
 }
 
 void Task::revCompleted()
@@ -65,21 +66,20 @@ std::vector<Task> Task::getSubtasks() const
 }
 bool Task::operator==(const Task& other) const
 {
-    return this->getId() == other.getId()? true : false;
+    return this->getId() == other.getId();
 }
 
 Task& Task::operator=(const Task& other)
 {
-    this->name = other.name;
-    this->description = other.description;
-    this->deadline = other.deadline;
-    this->status = other.status;
-    this->id = other.id;
-
-    this->subtasks.clear();
-    for (auto task : other.subtasks)
+    if (this != &other)
     {
-        this->addSubtasks(task);
+        this->name = other.name;
+        this->description = other.description;
+        this->deadline = other.deadline;
+        this->status = other.status;
+        this->id = other.id;
+
+        this->subtasks = other.subtasks;
     }
 
     return *this;
@@ -88,7 +88,9 @@ Task& Task::operator=(const Task& other)
 bool Task::isEmpty() const
 {
     return name.empty() && description.empty() &&
-           deadline == std::chrono::year_month_day{std::chrono::year(1970), std::chrono::month(1), std::chrono::day(1)} || id == -1;
+               deadline ==
+                   std::chrono::year_month_day{std::chrono::year(1970), std::chrono::month(1), std::chrono::day(1)} ||
+           id == -1;
 }
 
 bool Task::isCompleted() const

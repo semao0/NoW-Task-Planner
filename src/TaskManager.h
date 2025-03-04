@@ -11,19 +11,20 @@ class TaskManager
 {
 private:
     std::vector<Task> tasks;
-    std::vector<Task> ArchiveTasks;
+    std::vector<Task> archiveTasks;
 
 public:
     void addTask(const Task& task);
+    void addTaskRev(const Task& task);
     void removeTask(const Task& task);
     void updateTask(const Task& updatedTask);
     void checkDeadlines();
     std::vector<Task>& getActiveTasks();
     std::vector<Task>& getArchiveTasks();
     std::vector<Task> getAllTasks();
-    const int getCountActiveTasks() const;
-    const int getCountArchiveTasks() const;
-    const int getCountAllTasks() const;
+    int getCountActiveTasks() const;
+    int getCountArchiveTasks() const;
+    int getCountAllTasks() const;
     std::vector<Task>& getTasks(bool isArchive);
     int getCountTasks(bool isArchive);
 

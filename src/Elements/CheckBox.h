@@ -47,6 +47,8 @@ public:
             if (box.getGlobalBounds().contains(mousePos))
             {
                 onClick();
+                Active = !Active;
+                updateText();
             }
         }
     }

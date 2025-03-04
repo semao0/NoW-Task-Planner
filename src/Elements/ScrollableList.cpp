@@ -47,7 +47,7 @@ void ScrollableList::setTasks(std::vector<Task> tasks)
     TaskManager subtasks;
     for (auto& task : tasks)
     {
-        subtasks.addTask(task);
+        subtasks.addTaskRev(task);
     }
     this->tasks = subtasks;
     updateRenderedTasks();
@@ -166,6 +166,11 @@ void ScrollableList::draw(sf::RenderWindow& window)
         window.draw(line);
     }
     checkBoxes.draw(window);
+    if (needupdate)
+    {
+        updateRenderedTasks();
+        needupdate = !needupdate;
+    }
 }
 
 void ScrollableList::handleEvent(const sf::Event& event)

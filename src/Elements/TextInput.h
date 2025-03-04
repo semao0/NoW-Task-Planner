@@ -12,7 +12,12 @@
 #include <SFML/Graphics/View.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
+#include <cctype>
 #include <chrono>
+#include <nlohmann/json.hpp>
+#include <string>
+#include "Label.h"
+#include <iostream>
 class TextInput : public guiElement
 {
 private:
@@ -21,9 +26,12 @@ private:
     sf::Text text;
     bool isActive;
     float viewOffset;
+    int maxLenghtText;
+    Label labelError;
 
 public:
-    TextInput(float x, float y, float width, float height) : isActive(false), viewOffset(0)
+    TextInput(float x, float y, float width, float height, int maxLenghtText = 20)
+        : isActive(false), viewOffset(0), maxLenghtText(maxLenghtText), labelError(x, y + height + 5, 100, 20, "", 16)
     {
         box.setPosition(x, y);
         box.setSize(sf::Vector2f(width, height));
@@ -38,6 +46,7 @@ public:
         text.setFillColor(sf::Color::Black);
         text.setCharacterSize(20);
         text.setPosition(x + 5, y + 5);
+        validate();
     }
     void draw(sf::RenderWindow& window) override
     {
@@ -55,6 +64,7 @@ public:
         sf::Sprite textSprite(textureForText.getTexture());
         textSprite.setPosition(box.getPosition());
         window.draw(textSprite);
+        labelError.draw(window);
     }
     void handleEvent(const sf::Event& event) override
     {
@@ -91,8 +101,79 @@ public:
                     viewOffset += font.getGlyph(str[str.getSize() - 1], text.getCharacterSize(), false).advance;
                 }
             }
+            validate();
         }
     }
+    bool isTooLong(size_t maxLenght)
+    {
+        return text.getString().getSize() > maxLenght;
+    }
+
+    bool isValid()
+    {
+        std::string str = text.getString();
+        for (char c : str)
+        {
+            if (!std::isalnum(c) && c != ' ')
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bool isEmpty()
+    {
+        return text.getString().isEmpty();
+    }
+
+    void validate()
+    {
+        if (isEmpty())
+        {
+            box.setOutlineColor(sf::Color::Red);
+            labelError.setText("Empty");
+            labelError.setTextColor(sf::Color::Red);
+        }
+        else if (!isValid())
+        {
+            box.setOutlineColor(sf::Color::Red);
+            labelError.setText("Not valid symbol: A-z, 0-9");
+            labelError.setTextColor(sf::Color::Red);
+        }
+        else if (isTooLong(maxLenghtText))
+        {
+            box.setOutlineColor(sf::Color(255, 165, 0));
+            labelError.setText("Too long. Max:" + std::to_string(maxLenghtText));
+            labelError.setTextColor(sf::Color(255, 165, 0));
+        }
+        else
+        {
+            box.setOutlineColor(sf::Color::Black);
+            labelError.setText("");
+        }
+    }
+
+    bool checkBeforeCreate()
+    {
+        if (isEmpty())
+        {
+            std::cout << "Ошибка: Пустое поле!" << std::endl;
+            return 0;
+        }
+        if (!isValid())
+        {
+            std::cout << "Ошибка: Некорректные символы!" << std::endl;
+            return 0;
+        }
+        if (isTooLong(maxLenghtText))
+        {
+            std::cout << "Ошибка: Текст слишком длинный!" << std::endl;
+            return 0;
+        }
+        return 1;
+    }
+
     std::string getText() const
     {
         return text.getString();
@@ -103,6 +184,7 @@ public:
         text.setString(str);
         float textWhight = text.getLocalBounds().width;
         viewOffset = std::max(0.0f, textWhight - (box.getSize().x - 10));
+        validate();
     }
 };
 #endif

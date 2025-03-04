@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include <vector>
 #include "TaskManager.h"
 #include "ScrollableList.h"
 
@@ -14,7 +15,7 @@ private:
     sf::RenderWindow window;
 
 public:
-    InfoWindow(Task& task, ScrollableList& Scroll, TaskManager& tasks, bool IsSubTask = false, bool isArchive = false);
+    InfoWindow(Task& task, ScrollableList& Scroll, TaskManager& tasks, bool IsSubTask = false);
     void run();
 
 private:
@@ -24,6 +25,6 @@ private:
     Task* selectedSubTask;
     std::shared_ptr<ScrollableList> ScrollInfo;
     Task dummyTask;
-    TaskManager subtasks;
+    std::vector<Task> subtasks;
 };
 #endif

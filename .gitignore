@@ -1,14 +1,14 @@
 # Временные файлы
-#*.o
-#*.obj
-#*.log
+*.o
+*.obj
+*.log
 
 # Каталоги сборки
-#build/
-#CMakeFiles/
-#cmake_install.cmake
+build/
+CMakeFiles/
+cmake_install.cmake
 
 # IDE
-#.vscode/
-#.idea/
-#*.iml
+.vscode/
+.idea/
+*.iml

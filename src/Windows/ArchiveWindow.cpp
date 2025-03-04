@@ -13,7 +13,7 @@
 #include <memory>
 
 ArchiveWindow::ArchiveWindow(TaskManager& tasks, ScrollableList& MainScroll)
-    : window(sf::VideoMode(1000, 700), "NoW", sf::Style::Titlebar | sf::Style::Close), tasks(tasks),
+    : window(sf::VideoMode(1000, 700), "NoW - Archive", sf::Style::Titlebar | sf::Style::Close), tasks(tasks),
       dummyTask("Dummy",
                 "No description",
                 std::chrono::year_month_day{std::chrono::year(1970), std::chrono::month(1), std::chrono::day(1)},
@@ -71,7 +71,7 @@ ArchiveWindow::ArchiveWindow(TaskManager& tasks, ScrollableList& MainScroll)
 
             if (!selectedTaskArc->isEmpty())
             {
-                auto window = std::make_shared<InfoWindow>(*selectedTaskArc, *ScrollArchive, tasks, false, true);
+                auto window = std::make_shared<InfoWindow>(*selectedTaskArc, *ScrollArchive, tasks);
                 window->run();
             }
             else

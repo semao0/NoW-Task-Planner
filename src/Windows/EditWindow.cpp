@@ -17,19 +17,19 @@ EditWindow::EditWindow(Task& task, TaskManager& tasks, ScrollableList& Scroll)
     auto nameinput = std::make_shared<TextInput>(400, 100, 450, 40);
     nameinput->setText(selectedTask.getName());
     EditElemets.addElement(nameinput);
-    auto namelabel = std::make_shared<Label>(100, 100, 100, 40, "Name:", false);
+    auto namelabel = std::make_shared<Label>(100, 100, 100, 40, "Name:");
     EditElemets.addElement(namelabel);
 
-    auto descinput = std::make_shared<TextInput>(400, 200, 450, 40);
+    auto descinput = std::make_shared<TextInput>(400, 200, 450, 40, 100);
     descinput->setText(selectedTask.getDescription());
     EditElemets.addElement(descinput);
-    auto desclabel = std::make_shared<Label>(100, 200, 100, 40, "Description:", false);
+    auto desclabel = std::make_shared<Label>(100, 200, 100, 40, "Description:");
     EditElemets.addElement(desclabel);
 
     auto calendarewidget = std::make_shared<CalendareWidget>(395, 300, 280, 100);
     EditElemets.addElement(calendarewidget);
     calendarewidget->setDate(selectedTask.getDeadline());
-    auto deadlinelabel = std::make_shared<Label>(100, 300, 100, 40, "Deadline:", false);
+    auto deadlinelabel = std::make_shared<Label>(100, 300, 100, 40, "Deadline:");
     EditElemets.addElement(deadlinelabel);
 
     auto buttonSave = std::make_shared<Button>(
