@@ -1,7 +1,7 @@
-#ifndef TEXTINPUT_H
-#define TEXTINPUT_H
+#pragma once
 
-#include "guiElement.h"
+#include "FontManager.h"
+#include "GUIElement.h"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -13,16 +13,14 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
 #include <cctype>
-#include <chrono>
 #include <nlohmann/json.hpp>
 #include <string>
 #include "Label.h"
 #include <iostream>
-class TextInput : public guiElement
+class TextInput : public GUIElement
 {
 private:
     sf::RectangleShape box;
-    sf::Font font;
     sf::Text text;
     bool isActive;
     float viewOffset;
@@ -38,11 +36,8 @@ public:
         box.setFillColor(sf::Color::White);
         box.setOutlineColor(sf::Color::Black);
         box.setOutlineThickness(2);
-        if (!font.loadFromFile("resources/Arial.ttf"))
-        {
-            throw std::runtime_error("Не удалось загрузить шрифт resources/Arial.ttf");
-        }
-        text.setFont(font);
+
+        text.setFont(FontManager::getFont());
         text.setFillColor(sf::Color::Black);
         text.setCharacterSize(20);
         text.setPosition(x + 5, y + 5);
@@ -85,7 +80,7 @@ public:
 
                     if (viewOffset > 0)
                     {
-                        viewOffset -= font.getGlyph(str[str.getSize() - 1], text.getCharacterSize(), false).advance;
+                        viewOffset -= FontManager::getFont().getGlyph(str[str.getSize() - 1], text.getCharacterSize(), false).advance;
                     }
                 }
             }
@@ -98,7 +93,7 @@ public:
 
                 if (textWight > box.getSize().x - 15)
                 {
-                    viewOffset += font.getGlyph(str[str.getSize() - 1], text.getCharacterSize(), false).advance;
+                    viewOffset += FontManager::getFont().getGlyph(str[str.getSize() - 1], text.getCharacterSize(), false).advance;
                 }
             }
             validate();
@@ -187,4 +182,3 @@ public:
         validate();
     }
 };
-#endif

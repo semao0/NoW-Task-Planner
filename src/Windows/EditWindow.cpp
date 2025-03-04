@@ -1,9 +1,9 @@
 #include "EditWindow.h"
-#include "CalendareWidget.h"
+#include "CalendarWidget.h"
 #include "ScrollableList.h"
 #include "TaskManager.h"
 #include "Label.h"
-#include "guiManager.h"
+#include "GUIManager.h"
 #include "Button.h"
 #include "TextInput.h"
 #include <SFML/Graphics/Color.hpp>
@@ -26,9 +26,9 @@ EditWindow::EditWindow(Task& task, TaskManager& tasks, ScrollableList& Scroll)
     auto desclabel = std::make_shared<Label>(100, 200, 100, 40, "Description:");
     EditElemets.addElement(desclabel);
 
-    auto calendarewidget = std::make_shared<CalendareWidget>(395, 300, 280, 100);
-    EditElemets.addElement(calendarewidget);
-    calendarewidget->setDate(selectedTask.getDeadline());
+    auto calendarwidget = std::make_shared<CalendarWidget>(395, 300, 280, 100);
+    EditElemets.addElement(calendarwidget);
+    calendarwidget->setDate(selectedTask.getDeadline());
     auto deadlinelabel = std::make_shared<Label>(100, 300, 100, 40, "Deadline:");
     EditElemets.addElement(deadlinelabel);
 
@@ -38,12 +38,11 @@ EditWindow::EditWindow(Task& task, TaskManager& tasks, ScrollableList& Scroll)
         170,
         40,
         "Save",
-        [&task, nameinput, descinput, calendarewidget, this, &tasks, &Scroll]()
+        [&task, nameinput, descinput, calendarwidget, this, &tasks, &Scroll]()
         {
-            Task newtask(nameinput->getText(), descinput->getText(), calendarewidget->getSelectedDate(), task.getId());
+            Task newtask(nameinput->getText(), descinput->getText(), calendarwidget->getSelectedDate(), task.getId());
             tasks.removeTask(task);
             tasks.addTask(newtask);
-            tasks.clearTasks();
             tasks.saveTasks();
             window.close();
             Scroll.setTasks(tasks);

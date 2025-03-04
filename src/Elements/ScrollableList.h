@@ -1,7 +1,6 @@
-#ifndef SCROLLABLELIST_H
-#define SCROLLABLELIST_H
+#pragma once
 
-#include "guiElement.h"
+#include "GUIElement.h"
 #include "TaskManager.h"
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -9,13 +8,11 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Window.hpp>
 #include <vector>
-#include "CheckBox.h"
-#include "guiManager.h"
-class ScrollableList : public guiElement
+#include "GUIManager.h"
+class ScrollableList : public GUIElement
 {
 private:
     sf::RectangleShape backgraund;
-    sf::Font font;
     TaskManager tasks;
     std::vector<sf::Text> renderedTasks;
     int visibleItemCount;
@@ -25,7 +22,7 @@ private:
     int selectedIndex;
     bool isCheckBox;
     bool isArchive;
-    guiManager checkBoxes;
+    GUIManager checkBoxes;
     bool needupdate;
 
     void updateRenderedTasks();
@@ -34,7 +31,8 @@ public:
     std::function<void(int)> onClickCallback;
     std::function<void(Task&)> onCheckBoxToggle;
 
-    ScrollableList(float x, float y, float width, float height, int itemHeight, bool isCheckBox = false, bool isArchive = false);
+    ScrollableList(
+        float x, float y, float width, float height, int itemHeight, bool isCheckBox = false, bool isArchive = false);
     void setTasks(TaskManager& tasks);
     void setTasks(std::vector<Task>);
 
@@ -42,4 +40,3 @@ public:
     void handleEvent(const sf::Event& event) override;
     int getIndex();
 };
-#endif

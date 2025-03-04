@@ -1,6 +1,5 @@
-#ifndef CREATEWINDOW_H
-#define CREATEWINDOW_H
-#include "guiManager.h"
+#pragma once
+#include "GUIManager.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -10,7 +9,7 @@
 class CreateWindow
 {
 private:
-    guiManager CreateElemets;
+    GUIManager CreateElemets;
     sf::RenderWindow window;
 
 public:
@@ -22,4 +21,3 @@ private:
     void handleEvents();
     bool isMain;
 };
-#endif

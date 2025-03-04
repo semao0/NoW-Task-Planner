@@ -1,16 +1,15 @@
-#ifndef BUTTON_H
-#define BUTTON_H
+#pragma once
 
 #include <string>
 #include <functional>
-#include "guiElement.h"
+#include "FontManager.h"
+#include "GUIElement.h"
 
-class Button : public guiElement
+class Button : public GUIElement
 {
 private:
     sf::RectangleShape box;
     sf::Text label;
-    sf::Font font;
     std::function<void()> onClick;
 
 public:
@@ -28,15 +27,11 @@ public:
         box.setFillColor(sf::Color::White);
         box.setOutlineColor(sf::Color::Black);
         box.setOutlineThickness(2);
-        if (!font.loadFromFile("resources/Arial.ttf"))
-        {
-            throw std::runtime_error("Не удалось загрузить шрифт resources/Arial.ttf");
-        }
-        label.setFont(font);
+        label.setFont(FontManager::getFont());
         float textWidth = 0;
         for (char c : text)
         {
-            textWidth += font.getGlyph(c, charsize, false).advance;
+            textWidth += FontManager::getFont().getGlyph(c, charsize, false).advance;
         }
         label.setString(text);
         label.setCharacterSize(charsize);
@@ -60,4 +55,3 @@ public:
         }
     }
 };
-#endif

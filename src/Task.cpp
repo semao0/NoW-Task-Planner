@@ -1,11 +1,9 @@
 #include "Task.h"
-#include <bits/chrono.h>
 #include <chrono>
 
 Task::Task(
     const std::string& name, const std::string& description, std::chrono::year_month_day deadline, int id, bool status)
-    : name(name), description(description), status(status), deadline(deadline.year(), deadline.month(), deadline.day()),
-      id(id)
+    : name(name), description(description), status(status), deadline(deadline), id(id)
 {
 }
 void Task::setDeadLine(const std::chrono::year_month_day newDeadLine)
@@ -15,16 +13,19 @@ void Task::setDeadLine(const std::chrono::year_month_day newDeadLine)
 
 std::chrono::days Task::getTimeLeft() const
 {
-    auto timenow = floor<std::chrono::days>(std::chrono::system_clock::now());
-    std::chrono::sys_days deadline_days = std::chrono::sys_days(deadline);
-    return deadline_days - timenow;
+    auto now = floor<std::chrono::days>(std::chrono::system_clock::now());
+    auto deadline_days = std::chrono::sys_days(deadline);
+    if (deadline_days < now)
+    {
+        return std::chrono::days(0);
+    }
+    return deadline_days - now;
 }
 
 bool Task::isDeadLineActive() const
 {
-    auto daysnow = floor<std::chrono::days>(std::chrono::system_clock::now());
-    std::chrono::year_month_day now{daysnow};
-    return deadline >= now;
+    auto now = floor<std::chrono::days>(std::chrono::system_clock::now());
+    return std::chrono::sys_days(deadline) >= now;
 }
 
 void Task::addSubtasks(const Task& subtask)
@@ -34,13 +35,10 @@ void Task::addSubtasks(const Task& subtask)
 
 void Task::addSubtasks(const std::vector<Task>& subtasks)
 {
-    for(const auto& subtask : subtasks)
-    {
-        this->subtasks.push_back(subtask);
-    }
+    this->subtasks.insert(this->subtasks.end(), subtasks.begin(), subtasks.end());
 }
 
-void Task::revCompleted()
+void Task::toggleCompletion()
 {
     status = !status;
 }

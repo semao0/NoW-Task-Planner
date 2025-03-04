@@ -1,9 +1,8 @@
 #include "InfoWindow.h"
-#include "CheckBox.h"
 #include "ScrollableList.h"
 #include "TaskManager.h"
 #include "Label.h"
-#include "guiManager.h"
+#include "GUIManager.h"
 #include "Button.h"
 #include "CreateWindow.h"
 #include <SFML/Graphics/Color.hpp>

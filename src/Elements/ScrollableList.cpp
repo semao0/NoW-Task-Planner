@@ -1,6 +1,8 @@
 #include "ScrollableList.h"
+#include "FontManager.h"
 #include "Task.h"
 #include "TaskManager.h"
+#include "CheckBox.h"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/PrimitiveType.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -11,13 +13,8 @@
 #include <string>
 #include <iostream>
 
-ScrollableList::ScrollableList(float x,
-                               float y,
-                               float width,
-                               float height,
-                               int itemHeight,
-                               bool isCheckBox,
-                               bool isArchive)
+ScrollableList::ScrollableList(
+    float x, float y, float width, float height, int itemHeight, bool isCheckBox, bool isArchive)
     : scrollOffset(0), itemHeight(itemHeight), position(x, y), selectedIndex(-1), isCheckBox(isCheckBox),
       isArchive(isArchive), needupdate(false)
 {
@@ -30,10 +27,6 @@ ScrollableList::ScrollableList(float x,
     visibleItemCount = height / itemHeight;
 
     updateRenderedTasks();
-    if (!font.loadFromFile("resources/Arial.ttf"))
-    {
-        throw std::runtime_error("Не удалось загрузить шрифт resources/Arial.ttf");
-    }
 }
 
 void ScrollableList::setTasks(TaskManager& tasks)
@@ -74,7 +67,7 @@ void ScrollableList::updateRenderedTasks()
 
         if (isCheckBox)
         {
-            auto checkbox = std::make_shared<CheckBox>(position.x + backgraund.getSize().x - 40,
+            auto checkbox = std::make_unique<CheckBox>(position.x + backgraund.getSize().x - 40,
                                                        position.y + i * itemHeight + (itemHeight / 1.7),
                                                        30,
                                                        30,
@@ -86,40 +79,30 @@ void ScrollableList::updateRenderedTasks()
 
                                                                if (t == task)
                                                                {
-                                                                   //    std::cout << "Before moving: \n";
-                                                                   //    for (const auto& t : tasks.getTasks(isArchive))
-                                                                   //    {
-                                                                   //        std::cout << "Task: " << t.getName()
-                                                                   //                  << ", ID: " << t.getId() << "\n";
-                                                                   //    }
                                                                    if (onCheckBoxToggle)
                                                                    {
                                                                        onCheckBoxToggle(t);
                                                                    }
                                                                    needupdate = true;
                                                                    tasks.loadTasks();
-                                                                   //    std::cout << "After moving: \n";
-                                                                   //    for (const auto& t : tasks.getTasks(isArchive))
-                                                                   //    {
-                                                                   //        std::cout << "Task: " << t.getName()
-                                                                   //                  << ", ID: " << t.getId() << "\n";
-                                                                   //    }
                                                                    break;
                                                                }
                                                            }
                                                        });
-            checkBoxes.addElement(checkbox);
+            checkBoxes.addElement(std::move(checkbox));
         }
-        if (font.getGlyph(name[0], 20, false).advance * name.size() > backgraund.getSize().x - 200)
+        if (FontManager::getFont().getGlyph(name[0], 20, false).advance * name.size() > backgraund.getSize().x - 200)
         {
-            name = name.substr(0, (backgraund.getSize().x - 200) / font.getGlyph('A', 20, false).advance) + "...";
+            name = name.substr(
+                       0, (backgraund.getSize().x - 200) / FontManager::getFont().getGlyph('A', 20, false).advance) +
+                   "...";
         }
 
-        sf::Text text(name, font, 20);
+        sf::Text text(name, FontManager::getFont(), 20);
         text.setPosition(position.x + 10, position.y + i * itemHeight + 10);
         text.setFillColor(sf::Color::Black);
 
-        sf::Text date(dateString, font, 20);
+        sf::Text date(dateString, FontManager::getFont(), 20);
         date.setPosition(position.x + 450, position.y + i * itemHeight + 10);
         if (!tasks.getTasks(isArchive)[i + scrollOffset].isDeadLineActive())
         {

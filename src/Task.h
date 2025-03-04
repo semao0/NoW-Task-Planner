@@ -1,5 +1,4 @@
-#ifndef TASK_H
-#define TASK_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -32,7 +31,7 @@ public:
 
     void addSubtasks(const Task& subtask);
     void addSubtasks(const std::vector<Task>& subtask);
-    void revCompleted();
+    void toggleCompletion();
     std::string getName() const;
     std::string getDescription() const;
     std::chrono::year_month_day getDeadline() const;
@@ -55,4 +54,3 @@ public:
         return ++currentId;
     }
 };
-#endif

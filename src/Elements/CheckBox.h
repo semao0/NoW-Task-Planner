@@ -1,18 +1,18 @@
-#ifndef CHECKBOX_H
-#define CHECKBOX_H
+#pragma once
 
-#include "guiElement.h"
+#include "FontManager.h"
+#include "GUIElement.h"
+#include <SFML/Graphics/Font.hpp>
 #include <functional>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
-class CheckBox : public guiElement
+class CheckBox : public GUIElement
 {
 private:
     sf::RectangleShape box;
-    sf::Font font;
     bool Active;
     sf::Text text;
     std::function<void()> onClick;
@@ -21,11 +21,7 @@ public:
     CheckBox(float x, float y, float width, float height, bool Active, const std::function<void()> callback)
         : Active(Active), onClick(callback)
     {
-        if (!font.loadFromFile("resources/Arial.ttf"))
-        {
-            throw std::runtime_error("Не удалось загрузить шрифт resources/Arial.ttf");
-        }
-        text.setFont(font);
+        text.setFont(FontManager::getFont());
         text.setCharacterSize(24);
         box.setPosition(x, y);
         box.setSize(sf::Vector2f(width, height));
@@ -58,16 +54,15 @@ public:
         {
             text.setString("+");
             text.setFillColor(sf::Color::Green);
-            float textWidth = font.getGlyph('+', 24, false).advance;
+            float textWidth = FontManager::getFont().getGlyph('+', 24, false).advance;
             text.setPosition(box.getPosition().x + (box.getSize().x - textWidth) / 2, box.getPosition().y);
         }
         else
         {
             text.setString("-");
             text.setFillColor(sf::Color::Red);
-            float textWidth = font.getGlyph('-', 24, false).advance;
+            float textWidth = FontManager::getFont().getGlyph('-', 24, false).advance;
             text.setPosition(box.getPosition().x + (box.getSize().x - textWidth) / 2, box.getPosition().y);
         }
     }
 };
-#endif

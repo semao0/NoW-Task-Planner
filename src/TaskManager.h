@@ -1,5 +1,4 @@
-#ifndef TASKMANAGER_H
-#define TASKMANAGER_H
+#pragma once
 
 #include "Task.h"
 #include <chrono>
@@ -45,4 +44,3 @@ public:
     void activatedTask(Task& task);
     void activatedOrArchivatedTask(Task& task, bool isCompleted);
 };
-#endif

@@ -1,9 +1,9 @@
 #include "CreateWindow.h"
-#include "CalendareWidget.h"
+#include "CalendarWidget.h"
 #include "ScrollableList.h"
 #include "TaskManager.h"
 #include "Label.h"
-#include "guiManager.h"
+#include "GUIManager.h"
 #include "Button.h"
 #include "TextInput.h"
 #include <SFML/Graphics/Color.hpp>
@@ -11,7 +11,6 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <memory>
-#include <iostream>
 
 CreateWindow::CreateWindow(TaskManager& tasks, ScrollableList& Scroll, Task* MainTask)
     : window(sf::VideoMode(1000, 700), "NoW - Create task", sf::Style::Titlebar | sf::Style::Close)
@@ -34,8 +33,8 @@ CreateWindow::CreateWindow(TaskManager& tasks, ScrollableList& Scroll, Task* Mai
     auto desclabel = std::make_shared<Label>(100, 200, 100, 40, "Description:");
     CreateElemets.addElement(desclabel);
 
-    auto calendarewidget = std::make_shared<CalendareWidget>(395, 300, 280, 100);
-    CreateElemets.addElement(calendarewidget);
+    auto calendarwidget = std::make_shared<CalendarWidget>(395, 300, 280, 100);
+    CreateElemets.addElement(calendarwidget);
     auto deadlinelabel = std::make_shared<Label>(100, 300, 100, 40, "Deadline:");
     CreateElemets.addElement(deadlinelabel);
 
@@ -45,7 +44,7 @@ CreateWindow::CreateWindow(TaskManager& tasks, ScrollableList& Scroll, Task* Mai
         170,
         40,
         "Create",
-        [nameinput, descinput, calendarewidget, &tasks, &window = window, &Scroll = Scroll, this, MainTask]()
+        [nameinput, descinput, calendarwidget, &tasks, &window = window, &Scroll = Scroll, this, MainTask]()
         {
             if (!nameinput->checkBeforeCreate() || !descinput->checkBeforeCreate())
             {
@@ -53,7 +52,7 @@ CreateWindow::CreateWindow(TaskManager& tasks, ScrollableList& Scroll, Task* Mai
             }
             Task newtask{nameinput->getText(),
                          descinput->getText(),
-                         calendarewidget->getSelectedDate(),
+                         calendarwidget->getSelectedDate(),
                          Task::generateUniqueId()};
             if (isMain)
             {
@@ -70,7 +69,7 @@ CreateWindow::CreateWindow(TaskManager& tasks, ScrollableList& Scroll, Task* Mai
             tasks.loadTasks();
         },
         20);
-    CreateElemets.addElement(button);
+    CreateElemets.addElement(std::move(button));
 }
 
 void CreateWindow::run()

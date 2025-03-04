@@ -2,7 +2,7 @@
 #include "ScrollableList.h"
 #include "InfoWindow.h"
 #include "TaskManager.h"
-#include "guiManager.h"
+#include "GUIManager.h"
 #include "Button.h"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>

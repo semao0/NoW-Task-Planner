@@ -1,6 +1,5 @@
-#ifndef EDITWINDOW_H
-#define EDITWINDOW_H
-#include "guiManager.h"
+#pragma once
+#include "GUIManager.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -10,7 +9,7 @@
 class EditWindow
 {
 private:
-    guiManager EditElemets;
+    GUIManager EditElemets;
     sf::RenderWindow window;
 
 public:
@@ -22,4 +21,3 @@ private:
     void handleEvents();
     Task& selectedTask;
 };
-#endif

@@ -1,9 +1,9 @@
-#ifndef INFOWINDOW_H
-#define INFOWINDOW_H
-#include "guiManager.h"
+#pragma once
+#include "GUIManager.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include <memory>
 #include <vector>
 #include "TaskManager.h"
 #include "ScrollableList.h"
@@ -11,7 +11,7 @@
 class InfoWindow
 {
 private:
-    guiManager InfoElemets;
+    GUIManager InfoElemets;
     sf::RenderWindow window;
 
 public:
@@ -27,4 +27,3 @@ private:
     Task dummyTask;
     std::vector<Task> subtasks;
 };
-#endif

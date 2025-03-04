@@ -1,16 +1,16 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 #include "ScrollableList.h"
-#include "guiManager.h"
+#include "GUIManager.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include <memory>
 #include "TaskManager.h"
 
 class MainWindow
 {
 private:
-    guiManager MainElemets;
+    GUIManager MainElemets;
     sf::RenderWindow window;
     TaskManager tasks;
     std::shared_ptr<ScrollableList> Scroll;
@@ -25,4 +25,3 @@ private:
     void handleEvents();
     Task dummyTask;
 };
-#endif

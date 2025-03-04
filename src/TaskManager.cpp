@@ -256,7 +256,7 @@ void TaskManager::archiveTask(Task& task)
     auto it = std::find(tasks.begin(), tasks.end(), task);
     if (it != tasks.end())
     {
-        it->revCompleted();
+        it->toggleCompletion();
         updateTask(*it);
         archiveTasks.push_back(*it);
         tasks.erase(it);
@@ -268,7 +268,7 @@ void TaskManager::activatedTask(Task& task)
     auto it = std::find(archiveTasks.begin(), archiveTasks.end(), task);
     if (it != archiveTasks.end())
     {
-        it->revCompleted();
+        it->toggleCompletion();
         updateTask(*it);
         tasks.push_back(*it);
         archiveTasks.erase(it);
@@ -295,7 +295,7 @@ void TaskManager::activatedOrArchivatedTask(Task& task, bool isCompleted)
 
     if (it != listFrom.end())
     {
-        it->revCompleted();
+        it->toggleCompletion();
         listTo.push_back(std::move(*it));
         listFrom.erase(it);
     }

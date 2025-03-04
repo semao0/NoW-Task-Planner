@@ -1,17 +1,16 @@
-#ifndef LABEL_H
-#define LABEL_H
+#pragma once
 
-#include "guiElement.h"
+#include "FontManager.h"
+#include "GUIElement.h"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
-class Label : public guiElement
+class Label : public GUIElement
 {
 private:
     sf::RectangleShape box;
-    sf::Font font;
     sf::Text text;
     bool IsFrame;
     sf::Color textColor;
@@ -21,11 +20,7 @@ public:
     Label(float x, float y, float width, float height, std::string Text, int textSize = 24, bool IsFrame = false)
         : IsFrame(IsFrame), textSize(textSize)
     {
-        if (!font.loadFromFile("resources/Arial.ttf"))
-        {
-            throw std::runtime_error("Не удалось загрузить шрифт resources/Arial.ttf");
-        }
-        text.setFont(font);
+        text.setFont(FontManager::getFont());
         text.setFillColor(sf::Color::Black);
         text.setCharacterSize(textSize);
         text.setString(Text);
@@ -87,4 +82,3 @@ public:
         this->text.setString(wrappedText);
     }
 };
-#endif
