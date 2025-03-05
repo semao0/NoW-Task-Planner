@@ -14,7 +14,7 @@
 EditWindow::EditWindow(Task& task, TaskManager& tasks, ScrollableList& Scroll)
     : window(sf::VideoMode(1000, 700), "NoW - Edit task", sf::Style::Titlebar | sf::Style::Close), selectedTask(task)
 {
-    auto nameinput = std::make_shared<TextInput>(400, 100, 450, 40);
+    auto nameinput = std::make_shared<TextInput>(400, 100, 450, 40, 35);
     nameinput->setText(selectedTask.getName());
     EditElemets.addElement(nameinput);
     auto namelabel = std::make_shared<Label>(100, 100, 100, 40, "Name:");
@@ -40,6 +40,10 @@ EditWindow::EditWindow(Task& task, TaskManager& tasks, ScrollableList& Scroll)
         "Save",
         [&task, nameinput, descinput, calendarwidget, this, &tasks, &Scroll]()
         {
+            if (!nameinput->checkBeforeCreate() || !descinput->checkBeforeCreate())
+            {
+                return;
+            }
             Task newtask(nameinput->getText(), descinput->getText(), calendarwidget->getSelectedDate(), task.getId());
             tasks.removeTask(task);
             tasks.addTask(newtask);

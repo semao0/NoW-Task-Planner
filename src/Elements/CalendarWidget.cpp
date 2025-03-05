@@ -14,6 +14,7 @@
 #include <chrono>
 #include <ctime>
 #include <memory>
+#include <sstream>
 #include <string>
 #include <iostream>
 
@@ -35,11 +36,31 @@ CalendarWidget::CalendarWidget(float x, float y, float width, float height)
     title.setPosition(position.x + width / 3.5, position.y + 5);
     title.setFillColor(sf::Color::Black);
 
-    auto buttonnext = std::make_unique<Button>(position.x + 5, position.y + 5, 30, 30, "<", [this]() { changeDate(-1); }, 18);
+    auto buttonnext =
+        std::make_unique<Button>(position.x + 5, position.y + 5, 30, 30, "<", [this]() { changeDate(-1); }, 18);
     elements.addElement(std::move(buttonnext));
     auto buttonprev =
-    std::make_unique<Button>(position.x + width - 35, position.y + 5, 30, 30, ">", [this]() { changeDate(1); }, 18);
+        std::make_unique<Button>(position.x + width - 35, position.y + 5, 30, 30, ">", [this]() { changeDate(1); }, 18);
     elements.addElement(std::move(buttonprev));
+}
+
+void CalendarWidget::drawWeekDays(sf::RenderWindow& window)
+{
+    for (int i = 0; i < dayNames.size(); i++)
+    {
+        sf::Text DayText;
+        setupText(DayText, dayNames[i], position.x + 10 + i * 40, position.y + 40);
+        window.draw(DayText);
+    }
+}
+
+void CalendarWidget::setupText(sf::Text& text, const std::string& str, float x, float y)
+{
+    text.setFont(FontManager::getFont());
+    text.setFillColor(sf::Color::Black);
+    text.setCharacterSize(16);
+    text.setString(str);
+    text.setPosition(x, y);
 }
 
 void CalendarWidget::draw(sf::RenderWindow& window)
@@ -47,16 +68,7 @@ void CalendarWidget::draw(sf::RenderWindow& window)
     selectedDay = static_cast<unsigned>(currentDate.day());
     window.draw(frame);
     window.draw(title);
-    for (int i = 0; i < dayNames.size(); i++)
-    {
-        sf::Text dayText;
-        dayText.setFont(FontManager::getFont());
-        dayText.setFillColor(sf::Color::Black);
-        dayText.setCharacterSize(16);
-        dayText.setString(dayNames[i]);
-        dayText.setPosition(position.x + 10 + i * 40, position.y + 40);
-        window.draw(dayText);
-    }
+    drawWeekDays(window);
 
     for (int i = 0; i < days.size(); i++)
     {
@@ -99,6 +111,7 @@ void CalendarWidget::handleEvent(const sf::Event& event)
             float y = position.y + 40 + (i / 7) * 30 + 30;
             if (MousePos.x > x && MousePos.x < x + 30 && MousePos.y > y && MousePos.y < y + 30 && days[i] != 0)
             {
+
                 selectedDay = days[i];
                 currentDate = std::chrono::year_month_day{
                     currentDate.year(), currentDate.month(), std::chrono::day{unsigned(days[i])}};
@@ -119,18 +132,9 @@ void CalendarWidget::updateCalendar()
         daysInMonth[1] = 29;
     }
 
-    std::tm firstday = {};
-    firstday.tm_mday = 1;
-    firstday.tm_year = static_cast<int>(currentDate.year()) - 1900;
-    firstday.tm_mon = static_cast<unsigned>(currentDate.month()) - 1;
-    std::mktime(&firstday);
-
-    int startday = firstday.tm_wday;
-
-    if (startday == 0)
-    {
-        startday = 7;
-    }
+    std::chrono::year_month_day firstDay{currentDate.year(), currentDate.month(), std::chrono::day{1}};
+    std::chrono::sys_days sysDay = std::chrono::sys_days{firstDay};
+    int startday = (std::chrono::weekday{sysDay}.c_encoding() + 6) % 7 + 1;
 
     days.clear();
     days.resize(startday - 1, 0);
@@ -139,8 +143,9 @@ void CalendarWidget::updateCalendar()
     {
         days.push_back(i);
     }
-    title.setString(monthNames[static_cast<unsigned>(currentDate.month()) - 1] + " " +
-                    std::to_string(static_cast<int>(currentDate.year())));
+    std::ostringstream oss;
+    oss << monthNames[static_cast<unsigned>(currentDate.month()) - 1] << " " << static_cast<int>(currentDate.year());
+    title.setString(oss.str());
 }
 
 std::chrono::year_month_day CalendarWidget::getCurrentDate()

@@ -26,7 +26,7 @@ public:
         text.setString(Text);
         box.setPosition(x, y);
 
-        box.setSize(sf::Vector2f(text.getLocalBounds().width + 10, height));
+        box.setSize(sf::Vector2f(text.getLocalBounds().width + 10, text.getLocalBounds().height + 10));
         box.setFillColor(sf::Color::White);
         if (IsFrame && text.getString() != "")
         {
@@ -44,6 +44,7 @@ public:
     void setText(std::string str)
     {
         text.setString(str);
+        box.setSize(sf::Vector2f(text.getLocalBounds().width + 10, text.getLocalBounds().height + 10));
     }
     void setTextColor(sf::Color textColor)
     {
@@ -54,28 +55,28 @@ public:
         std::string text = this->text.getString();
         std::string wrappedText;
         size_t lastSpace = std::string::npos;
-        size_t lineLenght = 0;
+        size_t lineLength = 0;
         for (int i = 0; i < text.size(); i++)
         {
             char c = text[i];
             wrappedText += c;
-            lineLenght++;
+            lineLength++;
             if (c == ' ')
             {
                 lastSpace = wrappedText.size() - 1;
             }
-            if (lineLenght >= 40)
+            if (lineLength >= 40)
             {
                 if (lastSpace != std::string::npos)
                 {
                     wrappedText[lastSpace] = '\n';
-                    lineLenght = wrappedText.size() - lastSpace - 1;
+                    lineLength = wrappedText.size() - lastSpace - 1;
                     lastSpace = std::string::npos;
                 }
                 else
                 {
                     wrappedText += '\n';
-                    lineLenght = 0;
+                    lineLength = 0;
                 }
             }
         }

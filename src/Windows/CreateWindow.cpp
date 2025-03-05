@@ -23,7 +23,7 @@ CreateWindow::CreateWindow(TaskManager& tasks, ScrollableList& Scroll, Task* Mai
     {
         isMain = false;
     }
-    auto nameinput = std::make_shared<TextInput>(400, 100, 450, 35);
+    auto nameinput = std::make_shared<TextInput>(400, 100, 450, 35, 35);
     CreateElemets.addElement(nameinput);
     auto namelabel = std::make_shared<Label>(100, 100, 100, 40, "Name:");
     CreateElemets.addElement(namelabel);

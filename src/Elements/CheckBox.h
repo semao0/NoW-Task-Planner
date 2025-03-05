@@ -3,6 +3,8 @@
 #include "FontManager.h"
 #include "GUIElement.h"
 #include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Rect.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <functional>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -54,15 +56,16 @@ public:
         {
             text.setString("+");
             text.setFillColor(sf::Color::Green);
-            float textWidth = FontManager::getFont().getGlyph('+', 24, false).advance;
-            text.setPosition(box.getPosition().x + (box.getSize().x - textWidth) / 2, box.getPosition().y);
         }
         else
         {
             text.setString("-");
             text.setFillColor(sf::Color::Red);
-            float textWidth = FontManager::getFont().getGlyph('-', 24, false).advance;
-            text.setPosition(box.getPosition().x + (box.getSize().x - textWidth) / 2, box.getPosition().y);
         }
+        sf::FloatRect textBounds = text.getLocalBounds();
+        sf::Vector2f boxPosition = box.getPosition();
+        sf::Vector2f boxSize = box.getSize();
+        text.setPosition(boxPosition.x + (boxSize.x - textBounds.width) / 2 - textBounds.left,
+                         boxPosition.y + (boxSize.y - textBounds.height) / 2 - textBounds.top);
     }
 };

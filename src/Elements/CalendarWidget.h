@@ -35,7 +35,12 @@ private:
     std::chrono::year_month_day getCurrentDate();
     void changeDate(const int count);
     GUIManager elements;
+    void drawWeekDays(sf::RenderWindow& window);
+    void setupText(sf::Text& text, const std::string& str, float x, float y);
 
+    const int CELL_WIDTH = 40.0;
+    const int CELL_HEIGHT = 30.0;
+    const int PADDING = 10.0;
 public:
     void setDate(std::chrono::year_month_day Date);
     CalendarWidget(float x, float y, float width, float height);
