@@ -13,12 +13,8 @@
 /.ninja_log
 /build.ninja
 
-# Скомпилированные бинарники и библиотеки
-*.exe
-*.out
-*.a
-*.so
-*.dll
+# Кэш Clangd
+/cache/
 
 # IDE
 /.vscode/
