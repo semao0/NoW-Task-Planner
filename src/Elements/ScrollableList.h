@@ -12,7 +12,7 @@
 class ScrollableList : public GUIElement
 {
 private:
-    sf::RectangleShape backgraund;
+    sf::RectangleShape background;
     TaskManager tasks;
     std::vector<sf::Text> renderedTasks;
     int visibleItemCount;
@@ -24,6 +24,7 @@ private:
     bool isArchive;
     GUIManager checkBoxes;
     bool needupdate;
+    void markForUpdate();
 
     void updateRenderedTasks();
 
@@ -34,9 +35,10 @@ public:
     ScrollableList(
         float x, float y, float width, float height, int itemHeight, bool isCheckBox = false, bool isArchive = false);
     void setTasks(TaskManager& tasks);
-    void setTasks(std::vector<Task>);
+    void setTasks(std::vector<Task>& tasks);
 
     void draw(sf::RenderWindow& window) override;
     void handleEvent(const sf::Event& event) override;
     int getIndex();
+    void setSelectedIndex(const int index);
 };

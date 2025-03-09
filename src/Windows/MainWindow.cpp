@@ -10,7 +10,6 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/VideoMode.hpp>
-#include <iostream>
 #include "EditWindow.h"
 #include <memory>
 
@@ -26,9 +25,10 @@ MainWindow::MainWindow()
     Scroll = std::make_shared<ScrollableList>(20, 20, 600, 600, 100, true, false);
     Scroll->onClickCallback = [this](int index)
     {
-        if (!tasks.getActiveTasks().empty() && index >= 0)
+        auto& activeTask = tasks.getActiveTasks();
+        if (!activeTask.empty() && index >= 0 && index < static_cast<int>(activeTask.size()))
         {
-            selectedTask = &tasks.getActiveTasks()[index];
+            selectedTask = &activeTask[index];
         }
         else
         {
@@ -39,83 +39,97 @@ MainWindow::MainWindow()
     {
         tasks.activatedOrArchivatedTask(t, t.isCompleted());
         tasks.saveTasks();
+        removeSelection();
     };
 
-    auto buttonCreate = std::make_shared<Button>(
-        810,
-        15,
-        170,
-        40,
-        "Create new task",
-        [this, &Scroll = Scroll]()
-        {
-            tasks.loadTasks();
-            Scroll->onClickCallback(Scroll->getIndex());
-            auto window = std::make_shared<CreateWindow>(tasks, *Scroll);
-            window->run();
-        },
-        20);
-    auto buttonEdit = std::make_shared<Button>(
-        810,
-        70,
-        170,
-        40,
-        "Edit task",
-        [this]()
-        {
-            Scroll->onClickCallback(Scroll->getIndex());
-
-            if (!selectedTask->isEmpty())
-            {
-                auto window = std::make_shared<EditWindow>(*selectedTask, tasks, *Scroll);
-                window->run();
-            }
-            else
-            {
-                std::cout << "SelectedTasks clear!" << std::endl;
-            }
-        },
-        20);
-    auto buttonArchive = std::make_shared<Button>(
-        810,
-        450,
-        170,
-        40,
-        "Archive",
-        [this]()
-        {
-            auto window = std::make_shared<ArchiveWindow>(tasks, *Scroll);
-            window->run();
-            tasks.loadTasks();
-            Scroll->setTasks(tasks);
-        },
-        20);
-    auto buttonInfo = std::make_shared<Button>(
-        810,
-        645,
-        170,
-        40,
-        "Info",
-        [this, &Scroll = Scroll, &tasks = tasks]()
-        {
-            Scroll->onClickCallback(Scroll->getIndex());
-
-            if (!selectedTask->isEmpty())
-            {
-                auto window = std::make_shared<InfoWindow>(*selectedTask, *Scroll, tasks);
-                window->run();
-            }
-            else
-            {
-                std::cout << "SelectedTasks clear!" << std::endl;
-            }
-        },
-        20);
-    MainElemets.addElement(buttonInfo);
-    MainElemets.addElement(buttonEdit);
-    MainElemets.addElement(buttonCreate);
     MainElemets.addElement(Scroll);
-    MainElemets.addElement(buttonArchive);
+
+    createButton(810,
+                 645,
+                 170,
+                 40,
+                 "Info",
+                 [this]()
+                 {
+                     Scroll->onClickCallback(Scroll->getIndex());
+
+                     if (!selectedTask->isEmpty())
+                     {
+                         auto window = std::make_shared<InfoWindow>(*selectedTask, *Scroll, tasks);
+                         window->run();
+                     }
+                     else
+                     {
+                         errorManager.showError("SelectedTask clear!");
+                     }
+                 });
+    createButton(810,
+                 70,
+                 170,
+                 40,
+                 "Edit task",
+                 [this]()
+                 {
+                     Scroll->onClickCallback(Scroll->getIndex());
+
+                     if (!selectedTask->isEmpty())
+                     {
+                         auto window = std::make_shared<EditWindow>(*selectedTask, tasks, *Scroll);
+                         window->run();
+                     }
+                     else
+                     {
+                         errorManager.showError("SelectedTask clear!");
+                     }
+                 });
+    createButton(810,
+                 15,
+                 170,
+                 40,
+                 "Create new task",
+                 [this]()
+                 {
+                     tasks.loadTasks();
+                     Scroll->onClickCallback(Scroll->getIndex());
+                     auto window = std::make_shared<CreateWindow>(tasks, *Scroll);
+                     window->run();
+                 });
+
+    createButton(810,
+                 350,
+                 170,
+                 40,
+                 "Archive",
+                 [this]()
+                 {
+                     auto window = std::make_shared<ArchiveWindow>(tasks, *Scroll);
+                     window->run();
+                     tasks.loadTasks();
+                     Scroll->setTasks(tasks);
+                 });
+
+    createButton(810,
+                 595,
+                 170,
+                 40,
+                 "Delete task",
+                 [this]()
+                 {
+                     Scroll->onClickCallback(Scroll->getIndex());
+
+                     if (!selectedTask->isEmpty())
+                     {
+                         tasks.removeTask(*selectedTask);
+                         tasks.saveTasks();
+                         Scroll->setTasks(tasks);
+                         removeSelection();
+                     }
+                     else
+                     {
+                         errorManager.showError("SelectedTask clear!");
+                     }
+                 });
+
     tasks.loadTasks();
     Scroll->setTasks(tasks);
 }
@@ -136,6 +150,7 @@ void MainWindow::handleEvents()
         if (event.type == sf::Event::Closed)
         {
             window.close();
+            return;
         }
         MainElemets.handleEvent(event);
     }
@@ -144,5 +159,21 @@ void MainWindow::render()
 {
     window.clear(sf::Color::White);
     MainElemets.draw(window);
+
+    errorManager.draw(window);
+    errorManager.update();
+
     window.display();
+}
+
+void MainWindow::createButton(
+    float x, float y, float hight, float weight, const std::string& text, const std::function<void()> OnCLick)
+{
+    MainElemets.addElement(std::make_shared<Button>(x, y, hight, weight, text, OnCLick, 20));
+}
+
+void MainWindow::removeSelection()
+{
+    selectedTask = &dummyTask;
+    Scroll->setSelectedIndex(-1);
 }

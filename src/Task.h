@@ -23,11 +23,15 @@ public:
          int id,
          bool status = false);
 
+    void updateSubTask(const Task& subtask);
+    void removeSubtask(const Task& subTask);
 
     void setDeadLine(const std::chrono::year_month_day);
     std::chrono::days getTimeLeft() const;
     bool isDeadLineActive() const;
     int getId() const;
+    void setName(const std::string& name);
+    void setDescription(const std::string& description);
 
     void addSubtasks(const Task& subtask);
     void addSubtasks(const std::vector<Task>& subtask);

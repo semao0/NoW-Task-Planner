@@ -126,6 +126,13 @@ build CMakeFiles/TaskPlanner.dir/src/Elements/FontManager.cpp.o: CXX_COMPILER__T
   OBJECT_DIR = CMakeFiles/TaskPlanner.dir
   OBJECT_FILE_DIR = CMakeFiles/TaskPlanner.dir/src/Elements
 
+build CMakeFiles/TaskPlanner.dir/src/Elements/ErrorManager.cpp.o: CXX_COMPILER__TaskPlanner_unscanned_Debug /home/semao0/TaskPlanner/src/Elements/ErrorManager.cpp || cmake_object_order_depends_target_TaskPlanner
+  DEP_FILE = CMakeFiles/TaskPlanner.dir/src/Elements/ErrorManager.cpp.o.d
+  FLAGS = -g -std=gnu++20
+  INCLUDES = -I/home/semao0/TaskPlanner/src/Elements -I/home/semao0/TaskPlanner/src -I/home/semao0/TaskPlanner/src/Windows
+  OBJECT_DIR = CMakeFiles/TaskPlanner.dir
+  OBJECT_FILE_DIR = CMakeFiles/TaskPlanner.dir/src/Elements
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target TaskPlanner
@@ -134,7 +141,7 @@ build CMakeFiles/TaskPlanner.dir/src/Elements/FontManager.cpp.o: CXX_COMPILER__T
 #############################################
 # Link the executable TaskPlanner
 
-build TaskPlanner: CXX_EXECUTABLE_LINKER__TaskPlanner_Debug CMakeFiles/TaskPlanner.dir/src/main.cpp.o CMakeFiles/TaskPlanner.dir/src/Windows/MainWindow.cpp.o CMakeFiles/TaskPlanner.dir/src/Windows/InfoWindow.cpp.o CMakeFiles/TaskPlanner.dir/src/Windows/ArchiveWindow.cpp.o CMakeFiles/TaskPlanner.dir/src/Windows/CreateWindow.cpp.o CMakeFiles/TaskPlanner.dir/src/Windows/EditWindow.cpp.o CMakeFiles/TaskPlanner.dir/src/Task.cpp.o CMakeFiles/TaskPlanner.dir/src/TaskManager.cpp.o CMakeFiles/TaskPlanner.dir/src/Elements/ScrollableList.cpp.o CMakeFiles/TaskPlanner.dir/src/Elements/CalendarWidget.cpp.o CMakeFiles/TaskPlanner.dir/src/Elements/FontManager.cpp.o | /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.6.1 /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.6.1 /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.6.1
+build TaskPlanner: CXX_EXECUTABLE_LINKER__TaskPlanner_Debug CMakeFiles/TaskPlanner.dir/src/main.cpp.o CMakeFiles/TaskPlanner.dir/src/Windows/MainWindow.cpp.o CMakeFiles/TaskPlanner.dir/src/Windows/InfoWindow.cpp.o CMakeFiles/TaskPlanner.dir/src/Windows/ArchiveWindow.cpp.o CMakeFiles/TaskPlanner.dir/src/Windows/CreateWindow.cpp.o CMakeFiles/TaskPlanner.dir/src/Windows/EditWindow.cpp.o CMakeFiles/TaskPlanner.dir/src/Task.cpp.o CMakeFiles/TaskPlanner.dir/src/TaskManager.cpp.o CMakeFiles/TaskPlanner.dir/src/Elements/ScrollableList.cpp.o CMakeFiles/TaskPlanner.dir/src/Elements/CalendarWidget.cpp.o CMakeFiles/TaskPlanner.dir/src/Elements/FontManager.cpp.o CMakeFiles/TaskPlanner.dir/src/Elements/ErrorManager.cpp.o | /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.6.1 /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.6.1 /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.6.1
   FLAGS = -g
   LINK_LIBRARIES = /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.6.1  /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.6.1  /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.6.1
   OBJECT_DIR = CMakeFiles/TaskPlanner.dir

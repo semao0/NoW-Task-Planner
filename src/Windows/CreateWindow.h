@@ -5,6 +5,7 @@
 #include <SFML/Graphics/Text.hpp>
 #include "TaskManager.h"
 #include "ScrollableList.h"
+#include "TextInput.h"
 
 class CreateWindow
 {
@@ -19,5 +20,8 @@ public:
 private:
     void render();
     void handleEvents();
-    bool isMain;
+    void createLabel(int x, int y, int weight, int height, const std::string& text);
+
+    std::shared_ptr<TextInput>
+    createTextInput(int x, int y, int weight, int height, int maxChars);
 };

@@ -239,7 +239,7 @@ void TaskManager::updateTask(const Task& updatedTask)
     {
         for (auto& task : list)
         {
-            if (task == updatedTask)
+            if (task != updatedTask)
             {
                 task = updatedTask;
                 return;

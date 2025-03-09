@@ -1,36 +1,16 @@
 {
-    "archivetasks": [
+    "archivetasks": [],
+    "currentid": 3,
+    "tasks": [
         {
-            "day": 8,
-            "description": "1222222222222222222222222222222222222222222222222222222222222222222222222 lk ",
-            "id": 6,
+            "day": 9,
+            "description": "1",
+            "id": 2,
             "month": 3,
-            "name": "predlozhenie  dashe ",
-            "status": true,
-            "subtasks": [],
-            "year": 2028
-        },
-        {
-            "day": 5,
-            "description": "w",
-            "id": 12,
-            "month": 3,
-            "name": "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-            "status": true,
-            "subtasks": [],
-            "year": 2025
-        },
-        {
-            "day": 5,
-            "description": "tema 3  easy",
-            "id": 9,
-            "month": 3,
-            "name": "learnt the psyholog",
-            "status": true,
+            "name": "1",
+            "status": false,
             "subtasks": [],
             "year": 2025
         }
-    ],
-    "currentid": 12,
-    "tasks": []
+    ]
 }

@@ -15,28 +15,18 @@
 CreateWindow::CreateWindow(TaskManager& tasks, ScrollableList& Scroll, Task* MainTask)
     : window(sf::VideoMode(1000, 700), "NoW - Create task", sf::Style::Titlebar | sf::Style::Close)
 {
-    if (MainTask == nullptr)
-    {
-        isMain = true;
-    }
-    else
-    {
-        isMain = false;
-    }
-    auto nameinput = std::make_shared<TextInput>(400, 100, 450, 35, 35);
-    CreateElemets.addElement(nameinput);
-    auto namelabel = std::make_shared<Label>(100, 100, 100, 40, "Name:");
-    CreateElemets.addElement(namelabel);
+    auto nameinput = createTextInput(400, 75, 450, 35, 35);
+    
+    createLabel(100, 75, 100, 40, "Name:");
 
-    auto descinput = std::make_shared<TextInput>(400, 200, 450, 35, 100);
-    CreateElemets.addElement(descinput);
-    auto desclabel = std::make_shared<Label>(100, 200, 100, 40, "Description:");
-    CreateElemets.addElement(desclabel);
+    auto descinput = createTextInput(400, 175, 450, 35, 100);
+    
+    createLabel(100, 175, 100, 40, "Description:");
 
-    auto calendarwidget = std::make_shared<CalendarWidget>(395, 300, 280, 100);
+    auto calendarwidget = std::make_shared<CalendarWidget>(395, 275, 280, 100);
     CreateElemets.addElement(calendarwidget);
-    auto deadlinelabel = std::make_shared<Label>(100, 300, 100, 40, "Deadline:");
-    CreateElemets.addElement(deadlinelabel);
+    
+    createLabel(100, 275, 100, 40, "Deadline:");
 
     auto button = std::make_shared<Button>(
         810,
@@ -44,7 +34,7 @@ CreateWindow::CreateWindow(TaskManager& tasks, ScrollableList& Scroll, Task* Mai
         170,
         40,
         "Create",
-        [nameinput, descinput, calendarwidget, &tasks, &window = window, &Scroll = Scroll, this, MainTask]()
+        [nameinput, descinput, calendarwidget, &tasks, &window = window, &Scroll, this, MainTask]()
         {
             if (!nameinput->checkBeforeCreate() || !descinput->checkBeforeCreate())
             {
@@ -54,7 +44,7 @@ CreateWindow::CreateWindow(TaskManager& tasks, ScrollableList& Scroll, Task* Mai
                          descinput->getText(),
                          calendarwidget->getSelectedDate(),
                          Task::generateUniqueId()};
-            if (isMain)
+            if (MainTask == nullptr)
             {
                 tasks.addTask(newtask);
                 Scroll.setTasks(tasks);
@@ -97,4 +87,16 @@ void CreateWindow::render()
     window.clear(sf::Color::White);
     CreateElemets.draw(window);
     window.display();
+}
+
+void CreateWindow::createLabel(int x, int y, int weight, int height, const std::string& text)
+{
+    CreateElemets.addElement(std::make_shared<Label>(x, y, weight, height, text));
+}
+
+std::shared_ptr<TextInput> CreateWindow::createTextInput(int x, int y, int weight, int height, int maxChars)
+{
+    auto input = std::make_shared<TextInput>(x, y, weight, height, maxChars);
+    CreateElemets.addElement(input);
+    return input;
 }

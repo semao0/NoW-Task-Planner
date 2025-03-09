@@ -38,10 +38,12 @@ private:
     void drawWeekDays(sf::RenderWindow& window);
     void setupText(sf::Text& text, const std::string& str, float x, float y);
 
-    const int CELL_WIDTH = 40.0;
-    const int CELL_HEIGHT = 30.0;
-    const int PADDING = 10.0;
+    const int CELL_WIDTH = 40;
+    const int CELL_HEIGHT = 30;
+    const int PADDING = 10;
+
 public:
+
     void setDate(std::chrono::year_month_day Date);
     CalendarWidget(float x, float y, float width, float height);
     void draw(sf::RenderWindow& window) override;

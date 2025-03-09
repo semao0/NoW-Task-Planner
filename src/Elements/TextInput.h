@@ -17,6 +17,7 @@
 #include <string>
 #include "Label.h"
 #include <iostream>
+#include <regex>
 class TextInput : public GUIElement
 {
 private:
@@ -24,12 +25,14 @@ private:
     sf::Text text;
     bool isActive;
     float viewOffset;
-    int maxLenghtText;
+    int maxLengthText;
     Label labelError;
+    const float PADDING = 5;
+    const float SCROLL_THRESHOLD = 15;
 
 public:
-    TextInput(float x, float y, float width, float height, int maxLenghtText = 20)
-        : isActive(false), viewOffset(0), maxLenghtText(maxLenghtText), labelError(x, y + height + 5, 100, 20, "", 16)
+    TextInput(float x, float y, float width, float height, int maxLengthText = 20)
+        : isActive(false), viewOffset(0), maxLengthText(maxLengthText), labelError(x, y + height + 5, 100, 20, "", 16)
     {
         box.setPosition(x, y);
         box.setSize(sf::Vector2f(width, height));
@@ -40,7 +43,7 @@ public:
         text.setFont(FontManager::getFont());
         text.setFillColor(sf::Color::Black);
         text.setCharacterSize(20);
-        text.setPosition(x + 5, y + 5);
+        text.setPosition(x + PADDING, y + PADDING);
         validate();
     }
     void draw(sf::RenderWindow& window) override
@@ -80,7 +83,9 @@ public:
 
                     if (viewOffset > 0)
                     {
-                        viewOffset -= FontManager::getFont().getGlyph(str[str.getSize() - 1], text.getCharacterSize(), false).advance;
+                        viewOffset -= FontManager::getFont()
+                                          .getGlyph(str[str.getSize() - 1], text.getCharacterSize(), false)
+                                          .advance;
                     }
                 }
             }
@@ -91,9 +96,10 @@ public:
 
                 float textWight = text.getLocalBounds().width;
 
-                if (textWight > box.getSize().x - 15)
+                if (textWight > box.getSize().x - SCROLL_THRESHOLD)
                 {
-                    viewOffset += FontManager::getFont().getGlyph(str[str.getSize() - 1], text.getCharacterSize(), false).advance;
+                    viewOffset +=
+                        FontManager::getFont().getGlyph(str[str.getSize() - 1], text.getCharacterSize(), false).advance;
                 }
             }
             validate();
@@ -106,15 +112,9 @@ public:
 
     bool isValid()
     {
-        std::string str = text.getString();
-        for (char c : str)
-        {
-            if (!std::isalnum(c) && c != ' ')
-            {
-                return false;
-            }
-        }
-        return true;
+        std::regex pattern("^[A-Za-z0-9_@., ]+$");
+        std::string str = text.getString().toAnsiString();
+        return std::regex_match(str, pattern);
     }
 
     bool isEmpty()
@@ -126,47 +126,47 @@ public:
     {
         if (isEmpty())
         {
-            box.setOutlineColor(sf::Color::Red);
-            labelError.setText("Empty");
-            labelError.setTextColor(sf::Color::Red);
+            applyValidateError("Error: The field is empty!", sf::Color::Red);
         }
         else if (!isValid())
         {
-            box.setOutlineColor(sf::Color::Red);
-            labelError.setText("Not valid symbol: A-z, 0-9");
-            labelError.setTextColor(sf::Color::Red);
+            applyValidateError("Error: Invalid characters used!", sf::Color::Red);
         }
-        else if (isTooLong(maxLenghtText))
+        else if (isTooLong(maxLengthText))
         {
-            box.setOutlineColor(sf::Color(255, 165, 0));
-            labelError.setText("Too long. Max:" + std::to_string(maxLenghtText));
-            labelError.setTextColor(sf::Color(255, 165, 0));
+            applyValidateError("Error: Text is too long! Max length: " + std::to_string(maxLengthText) + "!", sf::Color(255, 165, 0));
         }
         else
         {
-            box.setOutlineColor(sf::Color::Black);
-            labelError.setText("");
+            applyValidateError("", sf::Color::Black);
         }
+    }
+
+    void applyValidateError(const std::string massage, sf::Color color)
+    {
+        box.setOutlineColor(color);
+        labelError.setText(massage);
+        labelError.setTextColor(color);
     }
 
     bool checkBeforeCreate()
     {
         if (isEmpty())
         {
-            std::cout << "Ошибка: Пустое поле!" << std::endl;
-            return 0;
+            std::cerr << "Error: The field is empty!" << std::endl;
+            return false;
         }
         if (!isValid())
         {
-            std::cout << "Ошибка: Некорректные символы!" << std::endl;
-            return 0;
+            std::cerr << "Error: Invalid characters used!" << std::endl;
+            return false;
         }
-        if (isTooLong(maxLenghtText))
+        if (isTooLong(maxLengthText))
         {
-            std::cout << "Ошибка: Текст слишком длинный!" << std::endl;
-            return 0;
+            std::cerr << "Error: Text is too long! Max length: " << maxLengthText << "!" << std::endl;
+            return false;
         }
-        return 1;
+        return true;
     }
 
     std::string getText() const

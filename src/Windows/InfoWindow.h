@@ -1,4 +1,5 @@
 #pragma once
+#include "ErrorManager.h"
 #include "GUIManager.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -26,4 +27,9 @@ private:
     std::shared_ptr<ScrollableList> ScrollInfo;
     Task dummyTask;
     std::vector<Task> subtasks;
+    ErrorManager errorManager;
+    void createLabel(int x, int y, int weight, int height, const std::string& text, bool wrap = false);
+    void createButton(
+        float x, float y, float hight, float weight, const std::string& text, const std::function<void()> OnCLick);
+    void removeSelection();
 };

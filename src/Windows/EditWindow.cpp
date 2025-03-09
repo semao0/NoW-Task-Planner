@@ -11,26 +11,23 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <memory>
-EditWindow::EditWindow(Task& task, TaskManager& tasks, ScrollableList& Scroll)
+EditWindow::EditWindow(Task& task, TaskManager& tasks, ScrollableList& Scroll, Task* MainTask)
     : window(sf::VideoMode(1000, 700), "NoW - Edit task", sf::Style::Titlebar | sf::Style::Close), selectedTask(task)
 {
-    auto nameinput = std::make_shared<TextInput>(400, 100, 450, 40, 35);
-    nameinput->setText(selectedTask.getName());
-    EditElemets.addElement(nameinput);
-    auto namelabel = std::make_shared<Label>(100, 100, 100, 40, "Name:");
-    EditElemets.addElement(namelabel);
+    auto nameinput = createTextInput(400, 75, 450, 40, 35, selectedTask.getName());
 
-    auto descinput = std::make_shared<TextInput>(400, 200, 450, 40, 100);
-    descinput->setText(selectedTask.getDescription());
-    EditElemets.addElement(descinput);
-    auto desclabel = std::make_shared<Label>(100, 200, 100, 40, "Description:");
-    EditElemets.addElement(desclabel);
+    createLabel(100, 75, 100, 40, "Name:");
 
-    auto calendarwidget = std::make_shared<CalendarWidget>(395, 300, 280, 100);
+    auto descinput = 
+    createTextInput(400, 175, 450, 40, 100, selectedTask.getDescription());
+
+    createLabel(100, 175, 100, 40, "Description:");
+
+    auto calendarwidget = std::make_shared<CalendarWidget>(395, 275, 280, 100);
     EditElemets.addElement(calendarwidget);
     calendarwidget->setDate(selectedTask.getDeadline());
-    auto deadlinelabel = std::make_shared<Label>(100, 300, 100, 40, "Deadline:");
-    EditElemets.addElement(deadlinelabel);
+
+    createLabel(100, 275, 100, 40, "Deadline:");
 
     auto buttonSave = std::make_shared<Button>(
         810,
@@ -38,17 +35,28 @@ EditWindow::EditWindow(Task& task, TaskManager& tasks, ScrollableList& Scroll)
         170,
         40,
         "Save",
-        [&task, nameinput, descinput, calendarwidget, this, &tasks, &Scroll]()
+        [&task, nameinput, descinput, calendarwidget, this, &tasks, &Scroll, MainTask]()
         {
             if (!nameinput->checkBeforeCreate() || !descinput->checkBeforeCreate())
             {
                 return;
             }
-            Task newtask(nameinput->getText(), descinput->getText(), calendarwidget->getSelectedDate(), task.getId());
-            tasks.removeTask(task);
-            tasks.addTask(newtask);
-            tasks.saveTasks();
+            task.setDeadLine(calendarwidget->getSelectedDate());
+            task.setName(nameinput->getText());
+            task.setDescription(descinput->getText());
             window.close();
+            if(MainTask != nullptr)
+            {
+                MainTask->updateSubTask(task);
+                tasks.updateTask(*MainTask);
+                tasks.saveTasks();
+                return;
+            }
+            else
+            {
+                tasks.updateTask(task);
+                tasks.saveTasks();
+            }
             Scroll.setTasks(tasks);
         },
         20);
@@ -80,4 +88,17 @@ void EditWindow::render()
     window.clear(sf::Color::White);
     EditElemets.draw(window);
     window.display();
+}
+
+void EditWindow::createLabel(int x, int y, int weight, int height, const std::string& text)
+{
+    EditElemets.addElement(std::make_shared<Label>(x, y, weight, height, text));
+}
+
+std::shared_ptr<TextInput> EditWindow::createTextInput(int x, int y, int weight, int height, int maxChars, const std::string& text)
+{
+    auto input = std::make_shared<TextInput>(x, y, weight, height, maxChars);
+    input->setText(text);
+    EditElemets.addElement(input);
+    return input;
 }

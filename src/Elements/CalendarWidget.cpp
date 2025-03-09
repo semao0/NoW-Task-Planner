@@ -82,8 +82,8 @@ void CalendarWidget::draw(sf::RenderWindow& window)
         dayMonth.setFillColor(sf::Color::Black);
         dayMonth.setCharacterSize(16);
 
-        float x = position.x + (i % 7) * 40 + 10;
-        float y = position.y + 40 + (i / 7) * 30 + 30;
+        float x = position.x + (i % 7) * CELL_WIDTH + PADDING;
+        float y = position.y + CELL_WIDTH + (i / 7) * CELL_HEIGHT + PADDING * 3;
 
         dayMonth.setPosition(x, y);
 
@@ -107,16 +107,14 @@ void CalendarWidget::handleEvent(const sf::Event& event)
         sf::Vector2f MousePos(event.mouseButton.x, event.mouseButton.y);
         for (int i = 0; i < days.size(); i++)
         {
-            float x = position.x + (i % 7) * 40 + 10;
-            float y = position.y + 40 + (i / 7) * 30 + 30;
+            float x = position.x + (i % 7) * CELL_WIDTH + PADDING;
+            float y = position.y + CELL_WIDTH + (i / 7) * CELL_HEIGHT + PADDING * 3;
             if (MousePos.x > x && MousePos.x < x + 30 && MousePos.y > y && MousePos.y < y + 30 && days[i] != 0)
             {
 
                 selectedDay = days[i];
                 currentDate = std::chrono::year_month_day{
                     currentDate.year(), currentDate.month(), std::chrono::day{unsigned(days[i])}};
-                std::cout << days[i] << "-" << static_cast<unsigned>(currentDate.month()) << "-"
-                          << static_cast<int>(currentDate.year()) << std::endl;
             }
         }
     }

@@ -102,3 +102,33 @@ int Task::getId() const
 {
     return this->id;
 }
+
+void Task::setName(const std::string& name)
+{
+    this->name = name;
+}
+void Task::setDescription(const std::string& description)
+{
+    this->description = description;
+}
+
+void Task::updateSubTask(const Task& subtask)
+{
+    for(auto& sub : subtasks)
+    {
+        if(sub.id == subtask.getId())
+        {
+                sub = subtask;
+                return;
+        }
+    }
+}
+
+void Task::removeSubtask(const Task& subTask)
+{
+    auto it = std::find(subtasks.begin(), subtasks.end(), subTask);
+    if(it != subtasks.end())
+    {
+        subtasks.erase(it);
+    }
+}

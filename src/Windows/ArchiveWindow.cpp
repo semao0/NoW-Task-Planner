@@ -8,7 +8,6 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/VideoMode.hpp>
-#include <iostream>
 #include "EditWindow.h"
 #include <memory>
 
@@ -37,8 +36,12 @@ ArchiveWindow::ArchiveWindow(TaskManager& tasks, ScrollableList& MainScroll)
     {
         tasks.activatedOrArchivatedTask(t, t.isCompleted());
         tasks.saveTasks();
+        removeSelection();
     };
-    auto buttonEdit = std::make_shared<Button>(
+    ArchiveElemets.addElement(ScrollArchive);
+    ScrollArchive->setTasks(tasks);
+
+    createButton(
         810,
         70,
         170,
@@ -55,11 +58,10 @@ ArchiveWindow::ArchiveWindow(TaskManager& tasks, ScrollableList& MainScroll)
             }
             else
             {
-                std::cout << "SelectedTasks clear!" << std::endl;
+                errorManager.showError("SelectedTask clear!");
             }
-        },
-        20);
-    auto buttonInfo = std::make_shared<Button>(
+        });
+    createButton(
         810,
         645,
         170,
@@ -76,15 +78,31 @@ ArchiveWindow::ArchiveWindow(TaskManager& tasks, ScrollableList& MainScroll)
             }
             else
             {
-                std::cout << "SelectedTasks clear!" << std::endl;
+                errorManager.showError("SelectedTask clear!");
             }
-        },
-        20);
-    ArchiveElemets.addElement(buttonInfo);
-    ArchiveElemets.addElement(buttonEdit);
-    ArchiveElemets.addElement(ScrollArchive);
+        });
+        createButton(810,
+            595,
+            170,
+            40,
+            "Delete task",
+            [this, &tasks]()
+            {
+               ScrollArchive->onClickCallback(ScrollArchive->getIndex());
+
+               if (!selectedTaskArc->isEmpty())
+               {
+                   tasks.removeTask(*selectedTaskArc);
+                   tasks.saveTasks();
+                   ScrollArchive->setTasks(tasks);
+                   removeSelection();
+               }
+               else
+               {
+                   errorManager.showError("SelectedTask clear!");
+               }
+            });
     tasks.loadTasks();
-    ScrollArchive->setTasks(tasks);
 }
 
 void ArchiveWindow::run()
@@ -111,5 +129,21 @@ void ArchiveWindow::render()
 {
     window.clear(sf::Color::White);
     ArchiveElemets.draw(window);
+
+    errorManager.draw(window);
+    errorManager.update();
+
     window.display();
+}
+
+void ArchiveWindow::createButton(
+    float x, float y, float hight, float weight, const std::string& text, const std::function<void()> OnCLick)
+{
+    ArchiveElemets.addElement(std::make_shared<Button>(x, y, hight, weight, text, OnCLick, 20));
+}
+
+void ArchiveWindow::removeSelection()
+{
+    selectedTaskArc = &dummyTask;
+    ScrollArchive->setSelectedIndex(-1);
 }
