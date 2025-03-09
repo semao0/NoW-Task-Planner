@@ -1,14 +1,14 @@
 # Временные файлы
-#*.o
-#*.obj
-#*.log
+*.o
+*.obj
+*.log
 
-# Каталоги сборки
-#build/
-#CMakeFiles/
-#cmake_install.cmake
+# Каталоги сборки (но исключаем важные файлы и папки)
+build/*
+!build/resources/
+!build/tasks.json
 
-# IDE
-#.vscode/
-#.idea/
-#*.iml
+# Каталоги, создаваемые IDE
+.vscode/
+.idea/
+*.iml

@@ -1,3 +1,3 @@
-/home/semao0/TaskPlanner/build/CMakeFiles/TaskPlanner.dir
-/home/semao0/TaskPlanner/build/CMakeFiles/edit_cache.dir
-/home/semao0/TaskPlanner/build/CMakeFiles/rebuild_cache.dir
+/home/semao0/NoW-Task-Planner/build/CMakeFiles/NoW-Task-Planner.dir
+/home/semao0/NoW-Task-Planner/build/CMakeFiles/edit_cache.dir
+/home/semao0/NoW-Task-Planner/build/CMakeFiles/rebuild_cache.dir

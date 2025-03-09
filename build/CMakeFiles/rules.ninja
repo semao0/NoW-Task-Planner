@@ -6,7 +6,7 @@
 # It is included in the main 'build.ninja'.
 
 # =============================================================================
-# Project: TaskPlanner
+# Project: NoW-Task-Planner
 # Configurations: Debug
 # =============================================================================
 # =============================================================================
@@ -14,7 +14,7 @@
 #############################################
 # Rule for generating CXX dependencies.
 
-rule CXX_SCAN__TaskPlanner_Debug
+rule CXX_SCAN__NoW-Task-Planner_Debug
   depfile = $DEP_FILE
   command = "CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS-NOTFOUND" -format=p1689 -- /usr/bin/clang++ $DEFINES $INCLUDES $FLAGS -x c++ $in -c -o $OBJ_FILE -MT $DYNDEP_INTERMEDIATE_FILE -MD -MF $DEP_FILE > $DYNDEP_INTERMEDIATE_FILE.tmp && mv $DYNDEP_INTERMEDIATE_FILE.tmp $DYNDEP_INTERMEDIATE_FILE
   description = Scanning $in for CXX dependencies
@@ -23,8 +23,8 @@ rule CXX_SCAN__TaskPlanner_Debug
 #############################################
 # Rule to generate ninja dyndep files for CXX.
 
-rule CXX_DYNDEP__TaskPlanner_Debug
-  command = /usr/bin/cmake -E cmake_ninja_dyndep --tdi=CMakeFiles/TaskPlanner.dir/CXXDependInfo.json --lang=CXX --modmapfmt=clang --dd=$out @$out.rsp
+rule CXX_DYNDEP__NoW-Task-Planner_Debug
+  command = /usr/bin/cmake -E cmake_ninja_dyndep --tdi=CMakeFiles/NoW-Task-Planner.dir/CXXDependInfo.json --lang=CXX --modmapfmt=clang --dd=$out @$out.rsp
   description = Generating CXX dyndep file $out
   rspfile = $out.rsp
   rspfile_content = $in
@@ -33,7 +33,7 @@ rule CXX_DYNDEP__TaskPlanner_Debug
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__TaskPlanner_scanned_Debug
+rule CXX_COMPILER__NoW-Task-Planner_scanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang++ $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE @$DYNDEP_MODULE_MAP_FILE -o $out -c $in
@@ -43,7 +43,7 @@ rule CXX_COMPILER__TaskPlanner_scanned_Debug
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__TaskPlanner_unscanned_Debug
+rule CXX_COMPILER__NoW-Task-Planner_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang++ $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -53,7 +53,7 @@ rule CXX_COMPILER__TaskPlanner_unscanned_Debug
 #############################################
 # Rule for linking CXX executable.
 
-rule CXX_EXECUTABLE_LINKER__TaskPlanner_Debug
+rule CXX_EXECUTABLE_LINKER__NoW-Task-Planner_Debug
   command = $PRE_LINK && /usr/bin/clang++ $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
   description = Linking CXX executable $TARGET_FILE
   restat = $RESTAT
@@ -71,7 +71,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /usr/bin/cmake --regenerate-during-build -S/home/semao0/TaskPlanner -B/home/semao0/TaskPlanner/build
+  command = /usr/bin/cmake --regenerate-during-build -S/home/semao0/NoW-Task-Planner -B/home/semao0/NoW-Task-Planner/build
   description = Re-running CMake...
   generator = 1
 

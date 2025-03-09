@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(TaskPlanner)
+project(NoW-Task-Planner)
 
 # Указываем стандарт C++
 set(CMAKE_CXX_STANDARD 20)
@@ -12,7 +12,7 @@ set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Создаем исполняемый файл
-add_executable(TaskPlanner
+add_executable(NoW-Task-Planner
     src/main.cpp
     src/Windows/MainWindow.cpp
     src/Windows/InfoWindow.cpp
@@ -29,7 +29,7 @@ add_executable(TaskPlanner
 
 # Подключаем SFML
 find_package(SFML 2.5 REQUIRED COMPONENTS graphics window system)
-target_link_libraries(TaskPlanner
+target_link_libraries(NoW-Task-Planner
     PRIVATE
         sfml-graphics
         sfml-window
@@ -38,13 +38,13 @@ target_link_libraries(TaskPlanner
 
 # Подключаем nlohmann_json
 find_package(nlohmann_json 3.10 REQUIRED)
-target_link_libraries(TaskPlanner
+target_link_libraries(NoW-Task-Planner
     PRIVATE
         nlohmann_json::nlohmann_json
 )
 
 # Добавление заголовочных файлов
-target_include_directories(TaskPlanner PRIVATE
+target_include_directories(NoW-Task-Planner PRIVATE
     ${CMAKE_SOURCE_DIR}/src/Elements
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/src/Windows
