@@ -1,0 +1,24 @@
+# ninja log v5
+7	9276	1741536081795813664	CMakeFiles/NoW-Task-Planner.dir/src/Windows/CreateWindow.cpp.o	97eb18834f77499e
+7	7352	1741536079894851153	CMakeFiles/NoW-Task-Planner.dir/src/Windows/ArchiveWindow.cpp.o	115a70e555197fb3
+5	10762	1741533743727001066	CMakeFiles/NoW-Task-Planner.dir/src/TaskManager.cpp.o	b026c4b735626190
+8	10158	1741536082689796025	CMakeFiles/NoW-Task-Planner.dir/src/Windows/EditWindow.cpp.o	636da6dbc91103d4
+6	7475	1741536080016848748	CMakeFiles/NoW-Task-Planner.dir/src/Windows/MainWindow.cpp.o	2322c4da955202ac
+10158	10511	1741536083061788684	NoW-Task-Planner	cdf7d61a810bbcdf
+8	7099	1741536079633856297	CMakeFiles/NoW-Task-Planner.dir/src/Elements/ScrollableList.cpp.o	dbb46e8b47dde6ee
+7	9281	1741536081813813309	CMakeFiles/NoW-Task-Planner.dir/src/Windows/InfoWindow.cpp.o	2ba1ff2411baa498
+1	7305	1741533740283107333	CMakeFiles/NoW-Task-Planner.dir/src/main.cpp.o	79cc675758cceff3
+8	3826	1741536076367920634	CMakeFiles/NoW-Task-Planner.dir/src/Elements/CalendarWidget.cpp.o	851ba7923d7c70e7
+4	4793	1741533737770184855	CMakeFiles/NoW-Task-Planner.dir/src/Task.cpp.o	a1941643f8d261e0
+9	2514	1741536075057946419	CMakeFiles/NoW-Task-Planner.dir/src/Elements/ErrorManager.cpp.o	2ad78c8cfd8576e9
+9	1092	1741536073640974293	CMakeFiles/NoW-Task-Planner.dir/src/Elements/FontManager.cpp.o	1101ceecd8b5b6ea
+9	1110	1741536774815982822	CMakeFiles/NoW-Task-Planner.dir/src/Elements/FontManager.cpp.o	1101ceecd8b5b6ea
+9	1854	1741536775556866672	CMakeFiles/NoW-Task-Planner.dir/src/Elements/ErrorManager.cpp.o	2ad78c8cfd8576e9
+9	4579	1741536778274443197	CMakeFiles/NoW-Task-Planner.dir/src/Elements/CalendarWidget.cpp.o	851ba7923d7c70e7
+7	6944	1741536780642077606	CMakeFiles/NoW-Task-Planner.dir/src/Windows/ArchiveWindow.cpp.o	115a70e555197fb3
+8	7096	1741536780788055147	CMakeFiles/NoW-Task-Planner.dir/src/Elements/ScrollableList.cpp.o	dbb46e8b47dde6ee
+8	8536	1741536782215836232	CMakeFiles/NoW-Task-Planner.dir/src/Windows/EditWindow.cpp.o	636da6dbc91103d4
+6	8576	1741536782272827524	CMakeFiles/NoW-Task-Planner.dir/src/Windows/MainWindow.cpp.o	2322c4da955202ac
+7	9887	1741536783582627680	CMakeFiles/NoW-Task-Planner.dir/src/Windows/InfoWindow.cpp.o	2ba1ff2411baa498
+8	10343	1741536784029559631	CMakeFiles/NoW-Task-Planner.dir/src/Windows/CreateWindow.cpp.o	97eb18834f77499e
+10343	10683	1741536784392504542	NoW-Task-Planner	cdf7d61a810bbcdf
