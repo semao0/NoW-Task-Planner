@@ -4,6 +4,9 @@
 
 int main()
 {
+    std::filesystem::current_path("/home/semao0/NoW-Task-Planner");
+    std::cout << "Текущая рабочая директория: " << std::filesystem::current_path() << std::endl;
+
     try
     {
         MainWindow window;

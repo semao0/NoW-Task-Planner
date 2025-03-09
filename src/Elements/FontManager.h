@@ -13,7 +13,7 @@ public:
     {
         if(!isLoaded)
         {
-            if(!font.loadFromFile("resources/Arial.ttf"))
+            if(!font.loadFromFile("assets/fonts/Arial.ttf"))
             {
                 throw std::runtime_error("Failed to load font resources/Arial.ttf!");
             }
