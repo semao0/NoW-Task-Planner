@@ -3,9 +3,9 @@
 *.obj
 *.log
 
-# Каталоги сборки (но исключаем важные файлы и папки)
-build/*
-!build/resources/
+# Каталоги сборки (кроме ресурсов и tasks.json)
+build/
+!build/resources
 !build/tasks.json
 
 # Каталоги, создаваемые IDE
