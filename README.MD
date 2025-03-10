@@ -23,7 +23,7 @@
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
-      <ul>
+      <ul>SPP-Project
         <li><a href="#dependencies">Dependencies</a></li>
         <li><a href="#installation">Installation</a></li>
       </ul>
@@ -129,7 +129,7 @@ This project is licensed under the MIT License. See the [LICENSE](./LICENSE) fil
 <!-- contact -->
 ## Contact
 
-Semen Belosuov - belousovsemen40@gmail.com
+Semen Belousov - belousovsemen40@gmail.com
 > [!IMPORTANT]
 > I wouldn't mind getting to know you and collaborating on something together!)
 <p align="right">*<a href="#readme-top">beginning</a>*</p>
